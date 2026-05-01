@@ -38,4 +38,4 @@ npm run dev
 
 ## Versioning
 
-Currently running version **v3.1.0**.
+Currently running version **v3.1.1**.
