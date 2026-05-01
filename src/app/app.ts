@@ -1,6 +1,7 @@
 // src/app/app.ts v3.0.0
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, effect } from '@angular/core';
 import { NavbarComponent } from './components/navbar';
+import { DecimalPipe } from '@angular/common';
 import { SidebarComponent } from './components/sidebar';
 import { PreviewComponent } from './components/preview';
 import { BuildListComponent } from './components/build-list';
@@ -32,7 +33,7 @@ const FOLD_DEFAULTS: ConfigComponent[] = [
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-root',
-  imports: [NavbarComponent, SidebarComponent, PreviewComponent, BuildListComponent, TPipe],
+  imports: [NavbarComponent, SidebarComponent, PreviewComponent, BuildListComponent, TPipe, DecimalPipe],
   styleUrl: './style.css',
   template: `
   <div class="bg-[#0a0a0b] text-zinc-300 font-sans w-full h-screen overflow-hidden flex flex-col relative">
@@ -89,7 +90,7 @@ const FOLD_DEFAULTS: ConfigComponent[] = [
                 <div class="col-span-full text-center text-zinc-500 py-20">No saved builds yet. Make something cool!</div>
               } @else {
                 @for (cfg of myConfigs(); track cfg.id) {
-                  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-zinc-600 transition-colors cursor-pointer group" (click)="loadConfig(cfg)">
+                  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-zinc-600 transition-colors cursor-pointer group" (click)="loadConfig(cfg)" (keydown.enter)="loadConfig(cfg)" tabindex="0">
                     <div class="flex justify-between items-start mb-4">
                       <div>
                         <div class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">{{ cfg.bikeType }}</div>

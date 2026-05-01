@@ -5,6 +5,7 @@ export interface ConfigComponent {
   name: string;
   price: number;
   weight: number; // in grams
+  bikeType?: string;
 }
 
 export interface Configuration {

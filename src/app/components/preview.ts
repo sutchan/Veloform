@@ -1,13 +1,14 @@
 // src/app/components/preview.ts v3.0.0
-import { ChangeDetectionStrategy, Component, input, effect, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { UpperCasePipe, DecimalPipe, CurrencyPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input, effect, ElementRef, ViewChild, AfterViewInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { DecimalPipe, CurrencyPipe } from '@angular/common';
 import { TPipe } from '../services/i18n';
 import * as THREE from 'three';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-preview',
-  imports: [UpperCasePipe, DecimalPipe, CurrencyPipe, TPipe],
+  imports: [DecimalPipe, CurrencyPipe, TPipe],
   template: `
   <section class="flex-1 relative flex flex-col bg-[#0f0f11]" id="preview-section">
     <div class="absolute top-10 left-10 z-10 pointer-events-none">
@@ -52,30 +53,36 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private bikeGroup!: THREE.Group;
-  private animationId: number = 0;
+  private animationId = 0;
+
+  private platformId = inject(PLATFORM_ID);
 
   constructor() {
     effect(() => {
       const currentType = this.type();
-      if (this.bikeGroup) {
+      if (isPlatformBrowser(this.platformId) && this.bikeGroup) {
         this.buildBikeMesh(currentType);
       }
     });
   }
 
   ngAfterViewInit() {
-    this.initThree();
-    this.buildBikeMesh(this.type());
-    this.animate();
-    window.addEventListener('resize', this.onResize.bind(this));
+    if (isPlatformBrowser(this.platformId)) {
+      this.initThree();
+      this.buildBikeMesh(this.type());
+      this.animate();
+      window.addEventListener('resize', this.onResize.bind(this));
+    }
   }
 
   ngOnDestroy() {
-    cancelAnimationFrame(this.animationId);
-    window.removeEventListener('resize', this.onResize.bind(this));
-    if (this.renderer) {
-      this.renderer.dispose();
-      this.rendererContainer.nativeElement.removeChild(this.renderer.domElement);
+    if (isPlatformBrowser(this.platformId)) {
+      cancelAnimationFrame(this.animationId);
+      window.removeEventListener('resize', this.onResize.bind(this));
+      if (this.renderer) {
+        this.renderer.dispose();
+        this.rendererContainer.nativeElement.removeChild(this.renderer.domElement);
+      }
     }
   }
 

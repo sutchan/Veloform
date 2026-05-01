@@ -1,5 +1,5 @@
 // src/app/services/i18n.ts v2.0.0
-import { Pipe, PipeTransform, signal, computed } from '@angular/core';
+import { Pipe, PipeTransform, signal } from '@angular/core';
 
 export type SupportedLang = 'en' | 'zh-CN';
 
