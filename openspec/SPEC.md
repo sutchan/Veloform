@@ -337,9 +337,20 @@ ESLint with `typescript-eslint` + `angular-eslint`:
 
 ### 10.3 Code Conventions
 
-- File header version comment: `// <relative_path> v<X.Y.Z>`
-- All components use `OnPush` change detection.
-- Signal-based state management (no RxJS for UI state).
-- Semantic `id` attributes on page containers.
-- All functions have concise comments.
-- Mobile-first responsive design with Tailwind breakpoints.
+- 使用 Angular standalone 组件，保持设计松耦合。
+- 组件默认使用 `OnPush` 变更检测。
+- UI 状态尽量采用 `signals`，非必要时不引入 RxJS 作为组件局部状态管理。
+- `app-` 前缀组件选择器，文件名和类名保持一致并使用 `kebab-case`。
+- 服务层应使用 dependency injection，不使用全局可变状态。
+- 代码风格应遵循 ESLint 规则，提交前执行 `npm run lint`。
+- 每个组件 / 服务文件建议配套 `*.spec.ts` 单元测试。
+- 语义化 HTML 与可访问性属性（如 `aria-label`、`role`）应作为首选方案。
+- Tailwind CSS 采用移动优先响应式设计，避免内联样式和过度嵌套。
+- 所有公共导出函数与类应补充简洁 JSDoc 注释。
+
+### 10.4 Development Workflow
+
+- 使用 `feature/`, `fix/`, `docs/`, `hotfix/` 等语义化分支命名。
+- 提交信息应使用 `<type>(<scope>): <description>` 格式。
+- 新增功能或修复应附带对应测试。
+- 文档和规范改动应同步更新 `README.md`, `README_CN.md`, `PROJECT_GUIDELINES.md` 或 `IMPROVEMENTS.md`。

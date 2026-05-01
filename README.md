@@ -28,6 +28,10 @@ Ensure you have your Firebase environment variable set, then run:
 npm run dev
 ```
 
+## Project Guidelines
+
+For development conventions, branch rules, testing strategy, and documentation policy, see `PROJECT_GUIDELINES.md`.
+
 ## Structure
 
 - `src/app/`
