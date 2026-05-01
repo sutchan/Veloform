@@ -10,15 +10,24 @@ import { notificationService } from './notification';
 export { notificationService };
 
 // Load Firebase config from environment variables or fallback to JSON file
+const getEnv = () => {
+  try {
+    return (import.meta as any).env || {};
+  } catch {
+    return {};
+  }
+};
+
+const env = getEnv();
 const firebaseConfig = {
-  projectId: (import.meta as any).env.VITE_FIREBASE_PROJECT_ID || fallbackConfig.projectId,
-  appId: (import.meta as any).env.VITE_FIREBASE_APP_ID || fallbackConfig.appId,
-  apiKey: (import.meta as any).env.VITE_FIREBASE_API_KEY || fallbackConfig.apiKey,
-  authDomain: (import.meta as any).env.VITE_FIREBASE_AUTH_DOMAIN || fallbackConfig.authDomain,
-  firestoreDatabaseId: (import.meta as any).env.VITE_FIRESTORE_DATABASE_ID || fallbackConfig.firestoreDatabaseId,
-  storageBucket: (import.meta as any).env.VITE_FIREBASE_STORAGE_BUCKET || fallbackConfig.storageBucket,
-  messagingSenderId: (import.meta as any).env.VITE_FIREBASE_MESSAGING_SENDER_ID || fallbackConfig.messagingSenderId,
-  measurementId: (import.meta as any).env.VITE_FIREBASE_MEASUREMENT_ID || fallbackConfig.measurementId,
+  projectId: env.VITE_FIREBASE_PROJECT_ID || fallbackConfig.projectId,
+  appId: env.VITE_FIREBASE_APP_ID || fallbackConfig.appId,
+  apiKey: env.VITE_FIREBASE_API_KEY || fallbackConfig.apiKey,
+  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || fallbackConfig.authDomain,
+  firestoreDatabaseId: env.VITE_FIRESTORE_DATABASE_ID || fallbackConfig.firestoreDatabaseId,
+  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || fallbackConfig.storageBucket,
+  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || fallbackConfig.messagingSenderId,
+  measurementId: env.VITE_FIREBASE_MEASUREMENT_ID || fallbackConfig.measurementId,
 };
 
 export const app = initializeApp(firebaseConfig);
@@ -56,8 +65,8 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
     authInfo: {
-      userId: auth.currentUser?.uid,
-      email: auth.currentUser?.email,
+      userId: auth?.currentUser?.uid,
+      email: auth?.currentUser?.email,
     },
     operationType,
     path

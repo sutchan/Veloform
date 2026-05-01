@@ -2,16 +2,26 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as firebaseAuth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
-import { handleFirestoreError, loginWithGoogle, notificationService } from './firebase';
+import { handleFirestoreError, loginWithGoogle, notificationService, auth } from './firebase';
 
 // Mock Firebase modules
 vi.mock('firebase/app');
-vi.mock('firebase/auth');
+vi.mock('firebase/auth', () => ({
+  getAuth: vi.fn(() => ({ currentUser: null })),
+  signInWithPopup: vi.fn(),
+  GoogleAuthProvider: vi.fn(),
+  onAuthStateChanged: vi.fn()
+}));
 vi.mock('firebase/firestore');
 
 describe('Firebase Service', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Reset auth state for each test
+    Object.defineProperty(firebaseAuth, 'auth', {
+      value: { currentUser: null },
+      writable: true
+    });
   });
 
   afterEach(() => {

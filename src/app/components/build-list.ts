@@ -1,4 +1,4 @@
-// src/app/components/build-list.ts v3.1.0
+// src/app/components/build-list.ts v3.2.0
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ConfigComponent } from '../types';
 import { CurrencyPipe } from '@angular/common';
@@ -23,9 +23,17 @@ import { LoadingIndicatorComponent } from './loading-indicator';
             <span class="text-[9px] uppercase text-zinc-500 font-bold tracking-widest">{{ comp.category }}</span>
             <span class="text-[9px] text-zinc-600">{{ comp.weight }}g</span>
           </div>
-          <div class="flex justify-between items-start">
-            <div class="text-xs text-white max-w-[180px] break-words">{{ comp.name }}</div>
-            <div class="text-[10px] text-zinc-500">{{ comp.price | currency:'USD':'symbol':'1.0-0' }}</div>
+          <div class="flex justify-between items-start gap-2">
+            <div class="text-xs text-white max-w-[150px] break-words">{{ comp.name }}</div>
+            <div class="flex items-center gap-2">
+              <button 
+                (click)="edit.emit(comp)"
+                class="text-[9px] text-zinc-500 hover:text-amber-500 transition-colors cursor-pointer bg-transparent border-none px-1 py-0.5 rounded hover:bg-zinc-800"
+                [attr.aria-label]="'build.edit_component' | t">
+                {{ 'build.edit_component' | t }}
+              </button>
+              <div class="text-[10px] text-zinc-500">{{ comp.price | currency:'USD':'symbol':'1.0-0' }}</div>
+            </div>
           </div>
           <div class="h-px w-full bg-zinc-900 mt-2"></div>
         </div>
@@ -66,4 +74,5 @@ export class BuildListComponent {
   
   sync = output<void>();
   deploy = output<void>();
+  edit = output<ConfigComponent>();
 }

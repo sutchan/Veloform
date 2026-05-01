@@ -28,7 +28,25 @@ const translations: Record<SupportedLang, Record<string, string>> = {
     'build.sync': 'Sync to Firebase',
     'build.saving': 'Saving...',
     'build.deploy': 'Deploy to Vercel',
-    'build.edge_ready': 'EdgeOne: Ready'
+    'build.edge_ready': 'EdgeOne: Ready',
+    'library.title': 'Your Garage',
+    'library.close': 'Close',
+    'library.login_required': 'Please log in to view your garage.',
+    'library.no_builds': 'No saved builds yet. Make something cool!',
+    'library.delete': 'Delete',
+    'library.confirm_delete_title': 'Delete Build',
+    'library.confirm_delete_message': 'Are you sure you want to delete this build? This action cannot be undone.',
+    'library.cancel': 'Cancel',
+    'bike_type.road': 'Road',
+    'bike_type.mtb': 'MTB',
+    'bike_type.fold': 'Fold',
+    'selector.title': 'Select Component',
+    'selector.category': 'Category',
+    'selector.close': 'Close',
+    'selector.current': 'Current',
+    'selector.no_components': 'No components available for this category.',
+    'selector.cancel': 'Cancel',
+    'build.edit_component': 'Edit'
   },
   'zh-CN': {
     'nav.configurator': '装车配置',
@@ -51,7 +69,25 @@ const translations: Record<SupportedLang, Record<string, string>> = {
     'build.sync': '同步到 Firebase',
     'build.saving': '保存中...',
     'build.deploy': '部署至 Vercel',
-    'build.edge_ready': 'EdgeOne: 就绪'
+    'build.edge_ready': 'EdgeOne: 就绪',
+    'library.title': '我的车库',
+    'library.close': '关闭',
+    'library.login_required': '请登录以查看您的车库。',
+    'library.no_builds': '暂无保存的配置。开始创建吧！',
+    'library.delete': '删除',
+    'library.confirm_delete_title': '删除配置',
+    'library.confirm_delete_message': '确定要删除此配置吗？此操作无法撤销。',
+    'library.cancel': '取消',
+    'bike_type.road': '公路车',
+    'bike_type.mtb': '山地车',
+    'bike_type.fold': '折叠车',
+    'selector.title': '选择组件',
+    'selector.category': '类别',
+    'selector.close': '关闭',
+    'selector.current': '当前',
+    'selector.no_components': '此类别下没有可用组件。',
+    'selector.cancel': '取消',
+    'build.edit_component': '编辑'
   }
 };
 

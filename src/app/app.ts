@@ -1,5 +1,6 @@
-// src/app/app.ts v3.1.0
+// src/app/app.ts v3.2.0
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, effect } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar';
 import { DecimalPipe } from '@angular/common';
 import { SidebarComponent } from './components/sidebar';
@@ -7,20 +8,34 @@ import { PreviewComponent } from './components/preview';
 import { BuildListComponent } from './components/build-list';
 import { NotificationDisplayComponent } from './components/notification-display';
 import { ConfirmDialogComponent, confirmDialogService } from './components/confirm-dialog';
+import { ComponentSelectorComponent } from './components/component-selector';
 import { Configuration, ConfigComponent } from './types';
 import { saveConfiguration, auth, getUserConfigurations, deleteConfiguration, getComponentsFromDB } from './services/firebase';
 import { TPipe } from './services/i18n';
+import { notificationService } from './services/notification';
 import { onAuthStateChanged } from 'firebase/auth';
 import { ROAD_DEFAULTS, MTB_DEFAULTS, FOLD_DEFAULTS } from './app.constants';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-root',
-  imports: [NavbarComponent, SidebarComponent, PreviewComponent, BuildListComponent, NotificationDisplayComponent, ConfirmDialogComponent, TPipe, DecimalPipe],
+  imports: [NavbarComponent, SidebarComponent, PreviewComponent, BuildListComponent, NotificationDisplayComponent, ConfirmDialogComponent, ComponentSelectorComponent, TPipe, DecimalPipe],
   styleUrl: './style.css',
   template: `
   <app-notification-display></app-notification-display>
   <app-confirm-dialog></app-confirm-dialog>
+  
+  <!-- Component Selector Modal -->
+  @if (showComponentSelector()) {
+    <app-component-selector 
+      [allComponents]="allDbComponents()"
+      [currentComponentId]="editingComponentId()"
+      [bikeType]="activeType()"
+      (close)="showComponentSelector.set(false)"
+      (select)="onComponentSelected($event)">
+    </app-component-selector>
+  }
+  
   <div class="bg-[#0a0a0b] text-zinc-300 font-sans w-full h-screen overflow-hidden flex flex-col relative">
     <app-navbar (openLibrary)="showLibrary.set(true)"></app-navbar>
 
@@ -56,32 +71,33 @@ import { ROAD_DEFAULTS, MTB_DEFAULTS, FOLD_DEFAULTS } from './app.constants';
           [components]="components()" 
           [isSaving]="isSaving()"
           (sync)="onSync()" 
-          (deploy)="onDeploy()">
+          (deploy)="onDeploy()"
+          (edit)="onEditComponent($event)">
         </app-build-list>
 
         @if (showLibrary()) {
           <div class="absolute inset-0 z-50 bg-[#0a0a0b]/90 backdrop-blur-xl p-10 flex flex-col pt-10" id="library-modal">
             <div class="flex justify-between items-center mb-10 w-full mx-auto">
-              <h2 class="text-3xl font-light text-white">Your Garage</h2>
-              <button (click)="showLibrary.set(false)" class="p-2 hover:bg-zinc-800 rounded-full cursor-pointer">
+              <h2 class="text-3xl font-light text-white">{{ 'library.title' | t }}</h2>
+              <button (click)="showLibrary.set(false)" class="p-2 hover:bg-zinc-800 rounded-full cursor-pointer" [attr.aria-label]="'library.close' | t">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="stroke-white" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
               </button>
             </div>
             
             <div class="w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto">
               @if (!isLoggedIn()) {
-                <div class="col-span-full text-center text-zinc-500 py-20">Please log in to view your garage.</div>
+                <div class="col-span-full text-center text-zinc-500 py-20">{{ 'library.login_required' | t }}</div>
               } @else if (myConfigs().length === 0) {
-                <div class="col-span-full text-center text-zinc-500 py-20">No saved builds yet. Make something cool!</div>
+                <div class="col-span-full text-center text-zinc-500 py-20">{{ 'library.no_builds' | t }}</div>
               } @else {
                 @for (cfg of myConfigs(); track cfg.id) {
                   <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-zinc-600 transition-colors cursor-pointer group" (click)="loadConfig(cfg)" (keydown.enter)="loadConfig(cfg)" tabindex="0">
                     <div class="flex justify-between items-start mb-4">
                       <div>
-                        <div class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">{{ cfg.bikeType }}</div>
+                        <div class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">{{ ('bike_type.' + cfg.bikeType.toLowerCase()) | t }}</div>
                         <h3 class="text-xl font-medium text-white group-hover:text-amber-500 transition-colors">{{ cfg.name }}</h3>
                       </div>
-                      <button (click)="removeConfig(cfg.id, $event)" class="text-zinc-600 hover:text-red-500 p-1 cursor-pointer bg-transparent border-none">
+                      <button (click)="removeConfig(cfg.id, $event)" class="text-zinc-600 hover:text-red-500 p-1 cursor-pointer bg-transparent border-none" [attr.aria-label]="'library.delete' | t">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                       </button>
                     </div>
@@ -113,6 +129,10 @@ export class App implements OnInit {
   showLibrary = signal(false);
   myConfigs = signal<Configuration[]>([]);
   isLoggedIn = signal(false);
+  
+  // Component selector state
+  showComponentSelector = signal(false);
+  editingComponentId = signal<string>('');
 
   configName = computed(() => {
     if (this.manualConfigName()) return this.manualConfigName()!;
@@ -123,7 +143,7 @@ export class App implements OnInit {
     }
   });
 
-  constructor() {
+  constructor(private router: Router) {
     onAuthStateChanged(auth, (u: any) => {
       this.isLoggedIn.set(!!u);
       if (u && this.showLibrary()) {
@@ -189,6 +209,11 @@ export class App implements OnInit {
     this.components.set(cfg.components);
     this.configId.set(cfg.id || null);
     this.showLibrary.set(false);
+    
+    // Update URL to reflect current configuration
+    if (cfg.id) {
+      this.router.navigate(['/config', cfg.id]);
+    }
   }
 
   async removeConfig(id: string | undefined, event: Event) {
@@ -197,10 +222,10 @@ export class App implements OnInit {
     
     // Use custom confirm dialog instead of native confirm()
     const confirmed = await confirmDialogService.confirm({
-      title: 'Delete Build',
-      message: 'Are you sure you want to delete this build? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel'
+      title: 'library.confirm_delete_title',
+      message: 'library.confirm_delete_message',
+      confirmText: 'library.delete',
+      cancelText: 'library.cancel'
     });
     
     if (!confirmed) return;
@@ -237,6 +262,9 @@ export class App implements OnInit {
     try {
       const newId = await saveConfiguration(config);
       this.configId.set(newId);
+      
+      // Update URL to reflect the saved configuration
+      this.router.navigate(['/config', newId]);
     } catch (e) {
       console.error('Failed to sync', e);
     } finally {
@@ -246,7 +274,33 @@ export class App implements OnInit {
 
   onDeploy() {
     console.log('Mock: Deploying to Vercel...');
-    // Show notification instead of alert
-    alert('Deployment initiated to Vercel (Mock). Production build triggered.');
+    // Use notification service instead of alert
+    notificationService.info('Deployment initiated to Vercel (Mock). Production build triggered.', 4000);
+  }
+  
+  /**
+   * Open component selector for editing a component
+   */
+  onEditComponent(component: ConfigComponent) {
+    this.editingComponentId.set(component.id);
+    this.showComponentSelector.set(true);
+  }
+  
+  /**
+   * Handle component selection from the selector modal
+   */
+  onComponentSelected(newComponent: ConfigComponent) {
+    const oldComponentId = this.editingComponentId();
+    
+    // Replace the component in the current configuration
+    this.components.update(comps => 
+      comps.map(c => c.id === oldComponentId ? newComponent : c)
+    );
+    
+    // Close the selector
+    this.showComponentSelector.set(false);
+    
+    // Show success notification
+    notificationService.success(`Component updated: ${newComponent.name}`, 2000);
   }
 }
