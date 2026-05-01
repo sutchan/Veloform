@@ -3,11 +3,12 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { ConfigComponent } from '../types';
 import { CurrencyPipe } from '@angular/common';
 import { TPipe } from '../services/i18n';
+import { LoadingIndicatorComponent } from './loading-indicator';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-build-list',
-  imports: [CurrencyPipe, TPipe],
+  imports: [CurrencyPipe, TPipe, LoadingIndicatorComponent],
   template: `
   <aside class="w-full md:w-80 border-l border-zinc-800 flex flex-col bg-[#0a0a0b] h-full" id="config-panel">
     <div class="p-6 border-b border-zinc-800 flex items-center justify-between">
@@ -36,9 +37,14 @@ import { TPipe } from '../services/i18n';
       <button 
         (click)="sync.emit()"
         [disabled]="isSaving()"
-        class="w-full py-3 bg-white text-black text-xs font-bold uppercase tracking-widest rounded hover:bg-zinc-200 transition-colors disabled:opacity-50 cursor-pointer" 
+        class="w-full py-3 bg-white text-black text-xs font-bold uppercase tracking-widest rounded hover:bg-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2" 
         id="btn-sync-firebase">
-        {{ isSaving() ? ('build.saving' | t) : ('build.sync' | t) }}
+        <app-loading-indicator [isLoading]="isSaving()" message="" wrapperClass="text-black"></app-loading-indicator>
+        @if (!isSaving()) {
+          {{ 'build.sync' | t }}
+        } @else {
+          {{ 'build.saving' | t }}
+        }
       </button>
       <button 
         (click)="deploy.emit()"

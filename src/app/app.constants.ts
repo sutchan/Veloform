@@ -1,4 +1,8 @@
-// src/app/app.constants.ts v3.1.0
+// src/app/app.constants.ts v3.2.0 - Default bike configurations
+/**
+ * Default components for Road bikes
+ * Used when no database components are available for this category
+ */
 import { ConfigComponent } from './types';
 
 export const ROAD_DEFAULTS: ConfigComponent[] = [

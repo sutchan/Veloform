@@ -5,6 +5,8 @@ import { DecimalPipe } from '@angular/common';
 import { SidebarComponent } from './components/sidebar';
 import { PreviewComponent } from './components/preview';
 import { BuildListComponent } from './components/build-list';
+import { NotificationDisplayComponent } from './components/notification-display';
+import { ConfirmDialogComponent, confirmDialogService } from './components/confirm-dialog';
 import { Configuration, ConfigComponent } from './types';
 import { saveConfiguration, auth, getUserConfigurations, deleteConfiguration, getComponentsFromDB } from './services/firebase';
 import { TPipe } from './services/i18n';
@@ -14,9 +16,11 @@ import { ROAD_DEFAULTS, MTB_DEFAULTS, FOLD_DEFAULTS } from './app.constants';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-root',
-  imports: [NavbarComponent, SidebarComponent, PreviewComponent, BuildListComponent, TPipe, DecimalPipe],
+  imports: [NavbarComponent, SidebarComponent, PreviewComponent, BuildListComponent, NotificationDisplayComponent, ConfirmDialogComponent, TPipe, DecimalPipe],
   styleUrl: './style.css',
   template: `
+  <app-notification-display></app-notification-display>
+  <app-confirm-dialog></app-confirm-dialog>
   <div class="bg-[#0a0a0b] text-zinc-300 font-sans w-full h-screen overflow-hidden flex flex-col relative">
     <app-navbar (openLibrary)="showLibrary.set(true)"></app-navbar>
 
@@ -120,7 +124,7 @@ export class App implements OnInit {
   });
 
   constructor() {
-    onAuthStateChanged(auth, (u) => {
+    onAuthStateChanged(auth, (u: any) => {
       this.isLoggedIn.set(!!u);
       if (u && this.showLibrary()) {
         this.fetchMyConfigs();
@@ -144,18 +148,19 @@ export class App implements OnInit {
     this.myConfigs.set(await getUserConfigurations());
   }
 
-  totalCost = computed(() => this.components().reduce((acc, c) => acc + c.price, 0));
+  totalCost = computed(() => this.components().reduce((acc: number, c: ConfigComponent) => acc + c.price, 0));
   
   baseWeight = computed(() => {
     switch(this.activeType()) {
       case 'Road': return 900;
       case 'MTB': return 1800;
       case 'Fold': return 2000;
+      default: return 900; // fallback
     }
   });
 
   totalWeight = computed(() => {
-    const compWeight = this.components().reduce((acc, c) => acc + c.weight, 0);
+    const compWeight = this.components().reduce((acc: number, c: ConfigComponent) => acc + c.weight, 0);
     return (this.baseWeight() + compWeight) / 1000; // in kg
   });
 
@@ -165,7 +170,7 @@ export class App implements OnInit {
     this.manualConfigName.set(null);
     
     // Attempt to pull from DB if downloaded
-    const dbFiltered = this.allDbComponents().filter(c => c.bikeType === type);
+    const dbFiltered = this.allDbComponents().filter((c: ConfigComponent) => c.bikeType === type);
     
     if (dbFiltered.length > 0) {
       this.components.set(dbFiltered);
@@ -189,19 +194,32 @@ export class App implements OnInit {
   async removeConfig(id: string | undefined, event: Event) {
     event.stopPropagation();
     if (!id) return;
-    if (confirm('Delete this build?')) {
+    
+    // Use custom confirm dialog instead of native confirm()
+    const confirmed = await confirmDialogService.confirm({
+      title: 'Delete Build',
+      message: 'Are you sure you want to delete this build? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel'
+    });
+    
+    if (!confirmed) return;
+    
+    try {
       await deleteConfiguration(id);
       await this.fetchMyConfigs();
       if (this.configId() === id) {
         this.configId.set(null); 
         this.onTypeSelected(this.activeType()); // Reset to defaults
       }
+    } catch (error) {
+      console.error('Delete failed', error);
     }
   }
 
   async onSync() {
     if (!auth.currentUser) {
-      alert('Please login first to sync configuration.');
+      // Notification will be shown by saveConfiguration
       return;
     }
     
@@ -219,7 +237,6 @@ export class App implements OnInit {
     try {
       const newId = await saveConfiguration(config);
       this.configId.set(newId);
-      console.log('Saved configuration successfully!');
     } catch (e) {
       console.error('Failed to sync', e);
     } finally {
@@ -229,6 +246,7 @@ export class App implements OnInit {
 
   onDeploy() {
     console.log('Mock: Deploying to Vercel...');
+    // Show notification instead of alert
     alert('Deployment initiated to Vercel (Mock). Production build triggered.');
   }
 }
