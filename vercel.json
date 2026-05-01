@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "framework": "angular",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/app/browser",
+  "trailingSlash": true,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
