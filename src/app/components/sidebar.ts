@@ -1,4 +1,4 @@
-// src/app/components/sidebar.ts v2.0.0
+// src/app/components/sidebar.ts v3.1.0
 import { ChangeDetectionStrategy, Component, output, input } from '@angular/core';
 import { TPipe } from '../services/i18n';
 

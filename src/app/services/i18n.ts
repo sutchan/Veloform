@@ -1,4 +1,4 @@
-// src/app/services/i18n.ts v2.0.0
+// src/app/services/i18n.ts v3.1.0
 import { Pipe, PipeTransform, signal } from '@angular/core';
 
 export type SupportedLang = 'en' | 'zh-CN';
@@ -10,12 +10,13 @@ const translations: Record<SupportedLang, Record<string, string>> = {
     'nav.specs': 'Specs',
     'nav.deployment': 'Deployment',
     'nav.theme': 'Theme',
+    'nav.language': 'Language',
     'nav.project_id': 'Project ID',
     'nav.login': 'Login',
     'sidebar.road': 'Road',
     'sidebar.mtb': 'MTB',
     'sidebar.fold': 'Fold',
-    'preview.v_custom': 'Custom Configuration v2.0',
+    'preview.v_custom': 'Custom Configuration',
     'preview.est_weight': 'Estimated Weight',
     'preview.aero_drag': 'Aerodynamic Drag',
     'preview.total_cost': 'Total Build Cost',
@@ -32,12 +33,13 @@ const translations: Record<SupportedLang, Record<string, string>> = {
     'nav.specs': '规格',
     'nav.deployment': '部署',
     'nav.theme': '主题',
+    'nav.language': '语言',
     'nav.project_id': '项目 ID',
     'nav.login': '登录',
     'sidebar.road': '公路车',
     'sidebar.mtb': '山地车',
     'sidebar.fold': '折叠车',
-    'preview.v_custom': '自定义配置 v2.0',
+    'preview.v_custom': '自定义配置',
     'preview.est_weight': '预估重量',
     'preview.aero_drag': '风阻系数',
     'preview.total_cost': '整车造价',

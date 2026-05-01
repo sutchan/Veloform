@@ -1,4 +1,4 @@
-// src/app/services/firebase.ts v3.0.0
+// src/app/services/firebase.ts v3.1.0
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, serverTimestamp, getDocs, deleteDoc, query, where } from 'firebase/firestore';

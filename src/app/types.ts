@@ -1,4 +1,4 @@
-// src/app/types.ts v2.0.0
+// src/app/types.ts v3.1.0
 export interface ConfigComponent {
   id: string;
   category: string;

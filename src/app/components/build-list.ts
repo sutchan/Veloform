@@ -1,4 +1,4 @@
-// src/app/components/build-list.ts v2.0.0
+// src/app/components/build-list.ts v3.1.0
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { ConfigComponent } from '../types';
 import { CurrencyPipe } from '@angular/common';

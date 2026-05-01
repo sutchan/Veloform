@@ -1,4 +1,4 @@
-// src/app/components/navbar.ts v3.0.0
+// src/app/components/navbar.ts v3.1.0
 import { ChangeDetectionStrategy, Component, signal, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { auth, loginWithGoogle } from '../services/firebase';
@@ -29,7 +29,7 @@ import { TPipe, toggleLang, currentLang } from '../services/i18n';
         <button (click)="toggleTheme()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ isDark() ? 'Dark' : 'Light' }}</button>
       </div>
       <div class="text-right hidden sm:block">
-        <div class="text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">Language</div>
+        <div class="text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.language' | t }}</div>
         <button (click)="switchLang()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ lang() === 'en' ? 'English' : '中文' }}</button>
       </div>
       <div class="text-right hidden sm:block" id="user-profile-container">
