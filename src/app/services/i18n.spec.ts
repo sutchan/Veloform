@@ -1,11 +1,42 @@
 // src/app/services/i18n.spec.ts
 import { describe, it, expect, beforeEach } from 'vitest';
-import { currentLang, toggleLang } from './i18n';
+import { currentLang, toggleLang, t } from './i18n';
+import { translations } from './i18n';
 
 describe('I18n Service', () => {
   beforeEach(() => {
     // Reset to default language before each test
     currentLang.set('en');
+  });
+
+  describe('Translation integrity', () => {
+    it('should have matching translation keys in both languages', () => {
+      const enKeys = Object.keys(translations['en']);
+      const zhKeys = Object.keys(translations['zh-CN']);
+      expect(enKeys.sort()).toEqual(zhKeys.sort());
+    });
+
+    it('should have non-empty translations for all English keys', () => {
+      Object.values(translations['en']).forEach((value, index) => {
+        const key = Object.keys(translations['en'])[index];
+        expect(value).toBeTruthy(`English translation for "${key}" is empty`);
+      });
+    });
+
+    it('should have non-empty translations for all Chinese keys', () => {
+      Object.values(translations['zh-CN']).forEach((value, index) => {
+        const key = Object.keys(translations['zh-CN'])[index];
+        expect(value).toBeTruthy(`Chinese translation for "${key}" is empty`);
+      });
+    });
+
+    it('should return translation for existing key', () => {
+      expect(t('nav.configurator')).toBe('Configurator');
+    });
+
+    it('should return key itself for missing translation', () => {
+      expect(t('nonexistent.key')).toBe('nonexistent.key');
+    });
   });
 
   describe('Language switching', () => {

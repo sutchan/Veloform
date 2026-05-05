@@ -6,7 +6,7 @@ import { Pipe, PipeTransform, signal } from '@angular/core';
 
 export type SupportedLang = 'en' | 'zh-CN';
 
-const translations: Record<SupportedLang, Record<string, string>> = {
+export const translations: Record<SupportedLang, Record<string, string>> = {
   'en': {
     'nav.configurator': 'Configurator',
     'nav.library': 'Library',
@@ -24,7 +24,7 @@ const translations: Record<SupportedLang, Record<string, string>> = {
     'preview.aero_drag': 'Aerodynamic Drag',
     'preview.total_cost': 'Total Build Cost',
     'build.title': 'Build List',
-    'build.components': 'COMPONENTS',
+    'build.components': ' components',
     'build.sync': 'Sync to Firebase',
     'build.saving': 'Saving...',
     'build.deploy': 'Deploy to Vercel',
