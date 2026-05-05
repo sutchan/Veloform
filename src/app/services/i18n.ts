@@ -1,4 +1,4 @@
-// src/app/services/i18n.ts v3.2.0 - Internationalization service
+// src/app/services/i18n.ts v3.1.1 - Internationalization service
 /**
  * Supported languages for the application
  */
@@ -40,6 +40,9 @@ const translations: Record<SupportedLang, Record<string, string>> = {
     'bike_type.road': 'Road',
     'bike_type.mtb': 'MTB',
     'bike_type.fold': 'Fold',
+    'bike.name.road': 'S-Works Tarmac SL8',
+    'bike.name.mtb': 'Epic World Cup',
+    'bike.name.fold': 'Brompton T Line',
     'selector.title': 'Select Component',
     'selector.category': 'Category',
     'selector.close': 'Close',
@@ -81,6 +84,9 @@ const translations: Record<SupportedLang, Record<string, string>> = {
     'bike_type.road': '公路车',
     'bike_type.mtb': '山地车',
     'bike_type.fold': '折叠车',
+    'bike.name.road': 'S-Works Tarmac SL8',
+    'bike.name.mtb': 'Epic World Cup',
+    'bike.name.fold': 'Brompton T Line',
     'selector.title': '选择组件',
     'selector.category': '类别',
     'selector.close': '关闭',
@@ -95,6 +101,10 @@ export const currentLang = signal<SupportedLang>('en');
 
 export function toggleLang() {
   currentLang.update(l => l === 'en' ? 'zh-CN' : 'en');
+}
+
+export function t(key: string): string {
+  return translations[currentLang()][key] || key;
 }
 
 @Pipe({

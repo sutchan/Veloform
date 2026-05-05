@@ -1,4 +1,4 @@
-// src/app/components/navbar.ts v3.1.0
+// src/app/components/navbar.ts v3.1.1
 import { ChangeDetectionStrategy, Component, signal, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { auth, loginWithGoogle } from '../services/firebase';

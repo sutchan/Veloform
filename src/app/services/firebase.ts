@@ -1,4 +1,4 @@
-// src/app/services/firebase.ts v3.1.0
+// src/app/services/firebase.ts v3.1.1
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, collection, serverTimestamp, getDocs, deleteDoc, query, where } from 'firebase/firestore';
@@ -62,17 +62,6 @@ interface FirestoreErrorInfo {
  * @internal
  */
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
-  const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
-    authInfo: {
-      userId: auth?.currentUser?.uid,
-      email: auth?.currentUser?.email,
-    },
-    operationType,
-    path
-  }
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  
   // Show user-friendly error message
   const errorMessages: Record<OperationType, string> = {
     [OperationType.CREATE]: 'Failed to save configuration. Please try again.',
@@ -97,7 +86,6 @@ export async function loginWithGoogle() {
     await signInWithPopup(auth, provider);
     notificationService.success('Login successful!');
   } catch (error) {
-    console.error('Login error', error);
     const message = error instanceof Error && error.message.includes('popup-closed')
       ? 'Login was cancelled. Please try again.'
       : 'Login failed. Please try again.';
@@ -215,8 +203,7 @@ async function seedComponents() {
   for (const s of seeds) {
     try {
       await setDoc(doc(collection(db, 'components'), s.id), s);
-    } catch (e) {
-      console.error('Seed error', e);
+    } catch {
     }
   }
 }

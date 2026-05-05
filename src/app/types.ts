@@ -1,4 +1,4 @@
-// src/app/types.ts v3.2.0 - Enhanced type definitions with JSDoc
+// src/app/types.ts v3.1.1 - Enhanced type definitions with JSDoc
 
 /**
  * Represents a single component in a bike configuration.

@@ -1,4 +1,4 @@
-// src/app/app.constants.ts v3.2.0 - Default bike configurations
+// src/app/app.constants.ts v3.1.1 - Default bike configurations
 /**
  * Default components for Road bikes
  * Used when no database components are available for this category

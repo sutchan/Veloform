@@ -1,4 +1,4 @@
-// src/app/components/confirm-dialog.ts
+// src/app/components/confirm-dialog.ts v3.1.1
 import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
 
 export interface ConfirmDialogOptions {

@@ -1,4 +1,4 @@
-// src/app/components/component-selector.ts v3.2.0 - Component selector modal for editing bike parts
+// src/app/components/component-selector.ts v3.1.1 - Component selector modal for editing bike parts
 import { ChangeDetectionStrategy, Component, input, output, signal, computed } from '@angular/core';
 import { ConfigComponent, BikeType } from '../types';
 import { CurrencyPipe } from '@angular/common';

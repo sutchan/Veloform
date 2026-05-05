@@ -1,4 +1,4 @@
-// src/app/app.ts v3.2.0
+// src/app/app.ts v3.1.1
 import { ChangeDetectionStrategy, Component, computed, signal, OnInit, effect } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar';
@@ -11,7 +11,7 @@ import { ConfirmDialogComponent, confirmDialogService } from './components/confi
 import { ComponentSelectorComponent } from './components/component-selector';
 import { Configuration, ConfigComponent } from './types';
 import { saveConfiguration, auth, getUserConfigurations, deleteConfiguration, getComponentsFromDB } from './services/firebase';
-import { TPipe } from './services/i18n';
+import { TPipe, t } from './services/i18n';
 import { notificationService } from './services/notification';
 import { onAuthStateChanged } from 'firebase/auth';
 import { ROAD_DEFAULTS, MTB_DEFAULTS, FOLD_DEFAULTS } from './app.constants';
@@ -137,9 +137,9 @@ export class App implements OnInit {
   configName = computed(() => {
     if (this.manualConfigName()) return this.manualConfigName()!;
     switch(this.activeType()) {
-      case 'Road': return 'S-Works Tarmac SL8';
-      case 'MTB': return 'Epic World Cup';
-      case 'Fold': return 'Brompton T Line';
+      case 'Road': return t('bike.name.road');
+      case 'MTB': return t('bike.name.mtb');
+      case 'Fold': return t('bike.name.fold');
     }
   });
 
@@ -237,8 +237,7 @@ export class App implements OnInit {
         this.configId.set(null); 
         this.onTypeSelected(this.activeType()); // Reset to defaults
       }
-    } catch (error) {
-      console.error('Delete failed', error);
+    } catch {
     }
   }
 
@@ -265,16 +264,13 @@ export class App implements OnInit {
       
       // Update URL to reflect the saved configuration
       this.router.navigate(['/config', newId]);
-    } catch (e) {
-      console.error('Failed to sync', e);
+    } catch {
     } finally {
       this.isSaving.set(false);
     }
   }
 
   onDeploy() {
-    console.log('Mock: Deploying to Vercel...');
-    // Use notification service instead of alert
     notificationService.info('Deployment initiated to Vercel (Mock). Production build triggered.', 4000);
   }
   
