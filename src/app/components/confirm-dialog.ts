@@ -1,5 +1,6 @@
 // src/app/components/confirm-dialog.ts v3.1.1
-import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { TPipe } from '../services/i18n';
 
 export interface ConfirmDialogOptions {
   title: string;
@@ -59,17 +60,17 @@ export const confirmDialogService = new ConfirmDialogService();
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-confirm-dialog',
-  imports: [],
+  imports: [TPipe],
   template: `
   @if (confirmDialogService.isOpen$()) {
     <div class="fixed inset-0 z-[10000] flex items-center justify-center bg-black/50 backdrop-blur-sm" id="confirm-dialog-overlay">
       <div class="bg-[#1a1a1b] border border-zinc-700 rounded-lg shadow-2xl max-w-sm mx-4 animate-in fade-in zoom-in-95" role="alertdialog">
         <div class="p-6">
           <h2 class="text-lg font-semibold text-white mb-2">
-            {{ confirmDialogService.options$()?.title }}
+            {{ confirmDialogService.options$()?.title | t }}
           </h2>
           <p class="text-zinc-400 text-sm leading-relaxed">
-            {{ confirmDialogService.options$()?.message }}
+            {{ confirmDialogService.options$()?.message | t }}
           </p>
         </div>
         
@@ -77,12 +78,12 @@ export const confirmDialogService = new ConfirmDialogService();
           <button 
             (click)="confirmDialogService.cancelAction()"
             class="flex-1 px-4 py-2 bg-zinc-800 text-zinc-300 text-sm font-medium rounded hover:bg-zinc-700 transition-colors cursor-pointer">
-            {{ confirmDialogService.options$()?.cancelText || 'Cancel' }}
+            {{ (confirmDialogService.options$()?.cancelText || 'confirm.cancel') | t }}
           </button>
           <button 
             (click)="confirmDialogService.confirmAction()"
             class="flex-1 px-4 py-2 bg-red-600 text-white text-sm font-medium rounded hover:bg-red-700 transition-colors cursor-pointer">
-            {{ confirmDialogService.options$()?.confirmText || 'Confirm' }}
+            {{ (confirmDialogService.options$()?.confirmText || 'confirm.ok') | t }}
           </button>
         </div>
       </div>

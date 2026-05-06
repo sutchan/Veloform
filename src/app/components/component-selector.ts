@@ -2,7 +2,7 @@
 import { ChangeDetectionStrategy, Component, input, output, signal, computed } from '@angular/core';
 import { ConfigComponent, BikeType } from '../types';
 import { CurrencyPipe } from '@angular/common';
-import { TPipe } from '../services/i18n';
+import { TPipe, t } from '../services/i18n';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,7 +18,7 @@ import { TPipe } from '../services/i18n';
         <div class="p-6 border-b border-zinc-800 flex items-center justify-between">
           <div>
             <h2 class="text-xl font-medium text-white">{{ 'selector.title' | t }}</h2>
-            <p class="text-xs text-zinc-500 mt-1">{{ 'selector.category' | t }}: {{ selectedCategory() }}</p>
+            <p class="text-xs text-zinc-500 mt-1">{{ 'selector.category' | t }}: {{ getCategoryLabel(selectedCategory()) }}</p>
           </div>
           <button (click)="close.emit()" 
                   class="p-2 hover:bg-zinc-800 rounded-full transition-colors cursor-pointer"
@@ -62,7 +62,7 @@ import { TPipe } from '../services/i18n';
                   tabindex="0">
                   
                   <div class="flex justify-between items-start mb-2">
-                    <span class="text-[10px] uppercase text-zinc-500 font-bold tracking-wider">{{ comp.category }}</span>
+                    <span class="text-[10px] uppercase text-zinc-500 font-bold tracking-wider">{{ getCategoryLabel(comp.category) }}</span>
                     @if (isCurrentComponent(comp.id)) {
                       <span class="text-[9px] text-amber-500 font-medium">{{ 'selector.current' | t }}</span>
                     }
@@ -132,7 +132,7 @@ export class ComponentSelectorComponent {
   }
   
   getCategoryLabel(category: string): string {
-    // Simple mapping - could be enhanced with i18n
-    return category;
+    const key = category === 'All' ? 'selector.all' : `selector.category.${category.toLowerCase()}`;
+    return t(key) || category;
   }
 }

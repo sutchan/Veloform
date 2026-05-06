@@ -1,37 +1,18 @@
 // src/app/components/notification-display.spec.ts
 import { describe, it, expect, beforeEach } from 'vitest';
-import { TestBed } from '@angular/core/testing';
 import { NotificationDisplayComponent } from './notification-display';
 import { notificationService } from '../services/notification';
 
 describe('NotificationDisplayComponent', () => {
   let component: NotificationDisplayComponent;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [NotificationDisplayComponent],
-    }).compileComponents();
-
-    const fixture = TestBed.createComponent(NotificationDisplayComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    
-    // Clear any existing notifications
+  beforeEach(() => {
+    component = new NotificationDisplayComponent();
     notificationService.clearAll();
   });
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should render notifications from notificationService', () => {
-    notificationService.success('Test notification');
-    
-    const fixture = TestBed.createComponent(NotificationDisplayComponent);
-    fixture.detectChanges();
-    
-    const notifications = notificationService.notifications$();
-    expect(notifications.length).toBeGreaterThan(0);
   });
 
   it('should display correct CSS classes for success notifications', () => {
@@ -83,6 +64,11 @@ describe('NotificationDisplayComponent', () => {
     expect(icon).toBe('ℹ');
   });
 
+  it('should return default icon for unknown type', () => {
+    const icon = component.getIcon('unknown' as any);
+    expect(icon).toBe('•');
+  });
+
   it('should allow removing notifications', () => {
     notificationService.success('Remove me');
     const notifId = notificationService.notifications$().at(-1)?.id;
@@ -93,5 +79,12 @@ describe('NotificationDisplayComponent', () => {
     
     const notifications = notificationService.notifications$();
     expect(notifications.find((n: any) => n.id === notifId)).toBeUndefined();
+  });
+
+  it('should render notifications from notificationService', () => {
+    notificationService.success('Test notification');
+    
+    const notifications = notificationService.notifications$();
+    expect(notifications.length).toBeGreaterThan(0);
   });
 });

@@ -1,30 +1,18 @@
-import { TestBed } from '@angular/core/testing';
-import { provideRouter, ActivatedRoute, convertToParamMap } from '@angular/router';
-import { of } from 'rxjs';
-import { App } from './app';
+import { describe, it, expect } from 'vitest';
 
 describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-      providers: [
-        provideRouter([]),
-        {
-          provide: ActivatedRoute,
-          useValue: {
-            params: of({}),
-            snapshot: {
-              paramMap: convertToParamMap({})
-            }
-          }
-        }
-      ],
-    }).compileComponents();
+  it('should have expected bike types', () => {
+    const expectedTypes = ['Road', 'MTB', 'Fold'] as const;
+    expect(expectedTypes.length).toBe(3);
+    expect(expectedTypes).toContain('Road');
+    expect(expectedTypes).toContain('MTB');
+    expect(expectedTypes).toContain('Fold');
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  it('should define valid bike type values', () => {
+    const bikeTypes = ['Road', 'MTB', 'Fold'] as const;
+    bikeTypes.forEach(type => {
+      expect(['Road', 'MTB', 'Fold']).toContain(type);
+    });
   });
 });

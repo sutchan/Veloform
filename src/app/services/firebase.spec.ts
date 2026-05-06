@@ -29,16 +29,13 @@ describe('Firebase Service', () => {
   });
 
   describe('handleFirestoreError', () => {
-    it('should log error with operation type and path', () => {
-      const consoleSpy = vi.spyOn(console, 'error');
+    it('should show error notification for create operations', () => {
+      const notifSpy = vi.spyOn(notificationService, 'error');
       const error = new Error('Test error');
       
       handleFirestoreError(error, 'create' as any, 'configurations/test-id');
       
-      expect(consoleSpy).toHaveBeenCalled();
-      const callArg = consoleSpy.mock.calls[0][1];
-      expect(typeof callArg).toBe('string');
-      expect(callArg as string).toContain('Test error');
+      expect(notifSpy).toHaveBeenCalled();
     });
 
     it('should call notificationService.error for CREATE operations', () => {
@@ -66,11 +63,11 @@ describe('Firebase Service', () => {
     });
 
     it('should handle non-Error objects', () => {
-      const consoleSpy = vi.spyOn(console, 'error');
+      const notifSpy = vi.spyOn(notificationService, 'error');
       
       handleFirestoreError('String error', 'get' as any, 'path');
       
-      expect(consoleSpy).toHaveBeenCalled();
+      expect(notifSpy).toHaveBeenCalled();
     });
   });
 

@@ -49,8 +49,19 @@ export const translations: Record<SupportedLang, Record<string, string>> = {
     'selector.current': 'Current',
     'selector.no_components': 'No components available for this category.',
     'selector.cancel': 'Cancel',
+    'selector.all': 'All',
+    'selector.category.frame': 'Frame',
+    'selector.category.drivetrain': 'Drivetrain',
+    'selector.category.wheelset': 'Wheelset',
+    'selector.category.suspension': 'Suspension',
+    'selector.category.cockpit': 'Cockpit',
+    'selector.category.tires': 'Tires',
     'build.edit_component': 'Edit',
-    'auth.login_required': 'Please log in to save configurations.'
+    'auth.login_required': 'Please log in to save configurations.',
+    'confirm.ok': 'OK',
+    'confirm.cancel': 'Cancel',
+    'confirm.yes': 'Yes',
+    'confirm.no': 'No'
   },
   'zh-CN': {
     'nav.configurator': '装车配置',
@@ -94,8 +105,19 @@ export const translations: Record<SupportedLang, Record<string, string>> = {
     'selector.current': '当前',
     'selector.no_components': '此类别下没有可用组件。',
     'selector.cancel': '取消',
+    'selector.all': '全部',
+    'selector.category.frame': '车架',
+    'selector.category.drivetrain': '传动系统',
+    'selector.category.wheelset': '轮组',
+    'selector.category.suspension': '悬挂',
+    'selector.category.cockpit': '操控组件',
+    'selector.category.tires': '轮胎',
     'build.edit_component': '编辑',
-    'auth.login_required': '请登录以保存配置。'
+    'auth.login_required': '请登录以保存配置。',
+    'confirm.ok': '确定',
+    'confirm.cancel': '取消',
+    'confirm.yes': '是',
+    'confirm.no': '否'
   }
 };
 
