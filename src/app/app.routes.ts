@@ -6,7 +6,10 @@ export const routes: Routes = [
     path: '', 
     loadComponent: () => import('./app').then(m => m.App),
     title: 'Veloform - Bike Configurator'
+  },
+  { 
+    path: 'config/:id', 
+    loadComponent: () => import('./app').then(m => m.App),
+    title: 'Veloform - Configuration'
   }
-  // Note: Dynamic route /config/:id is handled client-side via Router
-  // To enable sharing, users can copy the config ID from the URL after saving
 ];
