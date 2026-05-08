@@ -1,6 +1,7 @@
 // src/app/components/navbar.ts v3.2.0
 import { ChangeDetectionStrategy, Component, signal, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
+import { User } from 'firebase/auth';
 import { auth, loginWithGoogle } from '../services/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { TPipe, toggleLang, currentLang } from '../services/i18n';
@@ -52,7 +53,7 @@ import { TPipe, toggleLang, currentLang } from '../services/i18n';
   `
 })
 export class NavbarComponent {
-  user = signal<import('firebase/auth').User | null>(null);
+  user = signal<User | null>(null);
   isDark = signal(true);
   lang = currentLang;
   openLibrary = output<void>();

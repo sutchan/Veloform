@@ -1,4 +1,4 @@
-// src/app/components/component-selector.spec.ts
+// src/app/components/component-selector.spec.ts v3.2.0
 import { describe, it, expect } from 'vitest';
 import { ConfigComponent } from '../types';
 

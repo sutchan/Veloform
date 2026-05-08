@@ -1,4 +1,4 @@
-// src/app/components/notification-display.spec.ts
+// src/app/components/notification-display.spec.ts v3.2.0
 import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { NotificationDisplayComponent } from './notification-display';

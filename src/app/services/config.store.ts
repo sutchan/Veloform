@@ -2,7 +2,7 @@
 import { computed, signal } from '@angular/core';
 import { ConfigComponent, Configuration, BikeType } from '../types';
 import { ROAD_DEFAULTS, MTB_DEFAULTS, FOLD_DEFAULTS } from '../app.constants';
-import { t } from './i18n';
+import { currentLang, translations } from './i18n';
 
 export interface ConfigState {
   activeType: BikeType;
@@ -50,11 +50,10 @@ export class ConfigStore {
   readonly configName = computed(() => {
     const manual = this.state().manualConfigName;
     if (manual) return manual;
-    switch (this.state().activeType) {
-      case 'Road': return t('bike.name.road');
-      case 'MTB': return t('bike.name.mtb');
-      case 'Fold': return t('bike.name.fold');
-    }
+    const lang = currentLang();
+    const key = this.state().activeType === 'Road' ? 'bike.name.road' : 
+                this.state().activeType === 'MTB' ? 'bike.name.mtb' : 'bike.name.fold';
+    return translations[lang][key] || key;
   });
 
   readonly totalCost = computed(() =>

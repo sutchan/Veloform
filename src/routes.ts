@@ -1,3 +1,4 @@
+// src/routes.ts v3.2.0
 import { Routes } from '@angular/router';
 import { RenderMode } from '@angular/ssr';
 

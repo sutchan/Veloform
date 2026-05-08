@@ -1,3 +1,4 @@
+// src/app/app.config.ts v3.2.0
 import {
   ApplicationConfig,
   provideBrowserGlobalErrorListeners,

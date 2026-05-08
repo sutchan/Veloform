@@ -1,6 +1,6 @@
 // src/app/app.ts v3.2.0 - Refactored with ConfigStore and ConfigService
-import { ChangeDetectionStrategy, Component, computed, effect, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, effect, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NavbarComponent } from './components/navbar';
 import { DecimalPipe } from '@angular/common';
 import { SidebarComponent } from './components/sidebar';

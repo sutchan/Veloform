@@ -1,4 +1,4 @@
-// src/app/services/firebase.spec.ts
+// src/app/services/firebase.spec.ts v3.2.0
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as firebaseAuth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';

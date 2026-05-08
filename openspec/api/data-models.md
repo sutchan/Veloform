@@ -21,7 +21,8 @@
 | `name` | `string` | Yes | Max 200 chars | 显示名称 |
 | `price` | `number` | Yes | >= 0 | 价格（USD） |
 | `weight` | `number` | Yes | > 0 | 重量（grams） |
-| `bikeType` | `string` | No | `'Road' \| 'MTB' \| 'Fold'` | 关联车型 |
+| `bikeType` | `BikeType` | No | `'Road' \| 'MTB' \| 'Fold'` | 关联车型 |
+| `specs` | `string` | No | Max 500 chars | 规格描述 |
 
 **Category 枚举值**：
 - `Frame` - 车架
@@ -40,7 +41,8 @@ const component: ConfigComponent = {
   name: 'Shimano Dura-Ace Di2 R9200',
   price: 2800,
   weight: 1520,
-  bikeType: 'Road'
+  bikeType: 'Road',
+  specs: '12-speed electronic, 2x12 configuration'
 };
 ```
 

@@ -1,4 +1,4 @@
-// src/app/services/i18n.spec.ts
+// src/app/services/i18n.spec.ts v3.2.0
 import { describe, it, expect, beforeEach } from 'vitest';
 import { currentLang, toggleLang, t } from './i18n';
 import { translations } from './i18n';

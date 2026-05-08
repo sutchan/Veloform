@@ -2,60 +2,76 @@
 
 ## 状态管理架构
 
-Veloform 采用基于 Angular Signals 的单向数据流架构，确保状态变更的可预测性和可追踪性。
+Veloform 采用基于 Angular Signals 的单向数据流架构，使用 **ConfigStore** 和 **ConfigService** 实现中心化状态管理，确保状态变更的可预测性和可追踪性。
 
 ---
 
 ## 核心状态流
 
-### 根组件状态 (app.ts)
-
-根组件作为状态中枢，维护以下核心信号：
+### ConfigStore 状态定义
 
 ```typescript
-// 车型选择
-activeType = signal<'Road' | 'MTB' | 'Fold'>('Road');
+export interface ConfigState {
+  activeType: BikeType;           // 当前选中车型
+  components: ConfigComponent[];  // 当前配置组件列表
+  configId: string | null;        // 当前配置 ID（已保存时）
+  manualConfigName: string | null;// 用户自定义配置名称
+  allDbComponents: ConfigComponent[]; // 数据库组件缓存
+  showLibrary: boolean;           // 是否显示配置库模态框
+  myConfigs: Configuration[];     // 用户保存的配置列表
+  isLoggedIn: boolean;            // 用户登录状态
+  isSaving: boolean;              // 保存操作进行中
+  showComponentSelector: boolean; // 是否显示组件选择器
+  editingComponentId: string;     // 当前编辑的组件 ID
+}
 
-// 组件列表
-components = signal<ConfigComponent[]>(ROAD_DEFAULTS);
+// 默认状态
+const DEFAULT_STATE: ConfigState = {
+  activeType: 'Road',
+  components: [...ROAD_DEFAULTS],
+  configId: null,
+  manualConfigName: null,
+  allDbComponents: [],
+  showLibrary: false,
+  myConfigs: [],
+  isLoggedIn: false,
+  isSaving: false,
+  showComponentSelector: false,
+  editingComponentId: '',
+};
+```
 
-// 用户认证状态
-isLoggedIn = signal<boolean>(false);
-isSaving = signal<boolean>(false);
+### 计算属性
 
-// UI 状态
-showLibrary = signal<boolean>(false);
-configId = signal<string | null>(null);
-manualConfigName = signal<string | null>(null);
-
-// DB 组件缓存（用于按车型过滤）
-allDbComponents = signal<ConfigComponent[]>([]);
-
-// 计算属性
+```typescript
+// 配置名称（支持国际化）
 configName = computed(() => {
-  if (this.manualConfigName()) return this.manualConfigName()!;
-  switch(this.activeType()) {
-    case 'Road': return 'S-Works Tarmac SL8';
-    case 'MTB': return 'Epic World Cup';
-    case 'Fold': return 'Brompton T Line';
+  const manual = this.state().manualConfigName;
+  if (manual) return manual;
+  const lang = currentLang();
+  const key = this.state().activeType === 'Road' ? 'bike.name.road' : 
+              this.state().activeType === 'MTB' ? 'bike.name.mtb' : 'bike.name.fold';
+  return translations[lang][key] || key;
+});
+
+// 总成本
+totalCost = computed(() =>
+  this.state().components.reduce((acc, c) => acc + c.price, 0)
+);
+
+// 基础车架重量（克）
+baseWeight = computed(() => {
+  switch (this.state().activeType) {
+    case 'Road': return 900;
+    case 'MTB': return 1800;
+    case 'Fold': return 2000;
   }
 });
 
-totalCost = computed(() =>
-  components().reduce((sum, c) => sum + c.price, 0)
-);
-
-baseWeight = computed(() => {
-  const weights: Record<string, number> = { Road: 0.9, MTB: 1.8, Fold: 2.0 };
-  return weights[activeType()];
-});
-
+// 总重量（千克）
 totalWeight = computed(() => {
-  const componentWeight = components().reduce(
-    (sum, c) => sum + c.weight / 1000,
-    0
-  );
-  return baseWeight() + componentWeight;
+  const compWeight = this.state().components.reduce((acc, c) => acc + c.weight, 0);
+  return (this.baseWeight() + compWeight) / 1000;
 });
 ```
 
@@ -63,17 +79,23 @@ totalWeight = computed(() => {
 
 ```mermaid
 graph TD
-    A[app.ts - Root State] -->|input: activeType| B[SidebarComponent]
-    A -->|input: components, isSaving| C[BuildListComponent]
-    A -->|input: name, type, weight, cost| D[PreviewComponent]
-    A -->|no input bindings| E[NavbarComponent]
+    A[ConfigStore] -->|signals| B[app.ts]
+    B -->|input: activeType| C[SidebarComponent]
+    B -->|input: components, isSaving| D[BuildListComponent]
+    B -->|input: name, type, weight, cost| E[PreviewComponent]
+    B -->|no input bindings| F[NavbarComponent]
 
-    B -->|output: typeSelected| A
-    C -->|output: sync/save| F[FirebaseService]
-    C -->|output: deploy| G[Mock Deploy]
-    E -->|output: openLibrary| A
-    F -->|auth state change| A
-    F -->|save result| A
+    C -->|output: typeSelected| G[ConfigService]
+    D -->|output: sync/save| G
+    D -->|output: deploy| G
+    D -->|output: edit| G
+    F -->|output: openLibrary| G
+    
+    G -->|update signals| A
+    G -->|Firebase operations| H[(Firestore)]
+    
+    H -->|auth state| G
+    H -->|configurations| G
 ```
 
 ---
@@ -113,64 +135,115 @@ onTypeSelect(type: 'Road' | 'MTB' | 'Fold') {
 
 **使用场景**：
 - 用户选择车型
-- 触发自定义对话框
-- 通知父组件执行操作
+- 触发组件编辑对话框
+- 触发配置保存和部署操作
 
 ### 3. Service-based State (Shared)
 
-通过服务层共享跨组件状态：
+通过 **ConfigStore** 和 **ConfigService** 实现中心化状态管理：
 
 ```typescript
-// FirebaseService
-private _authState = signal<User | null>(null);
-readonly authState = this._authState.asReadonly();
-
-loginWithGoogle(): Promise<void> {
-  // ... authentication logic
-  this._authState.set(user);
+// ConfigStore - 状态容器
+export class ConfigStore {
+  private state = signal<ConfigState>({ ...DEFAULT_STATE });
+  
+  // 只读信号
+  readonly activeType = computed(() => this.state().activeType);
+  readonly components = computed(() => this.state().components);
+  readonly isLoggedIn = computed(() => this.state().isLoggedIn);
+  
+  // 更新方法
+  setActiveType(type: BikeType) {
+    this.state.update(s => ({ ...s, activeType: type }));
+  }
+  
+  replaceComponent(oldId: string, newComponent: ConfigComponent) {
+    this.state.update(s => ({
+      ...s,
+      components: s.components.map(c => c.id === oldId ? newComponent : c),
+    }));
+  }
 }
+
+// 单例导出
+export const configStore = new ConfigStore();
 ```
 
 **使用场景**：
-- 用户认证状态
-- 国际化语言设置
-- 通知消息队列
+- 用户认证状态（通过 ConfigStore 管理）
+- 当前配置状态（组件列表、车型类型等）
+- UI 状态（模态框显示/隐藏）
+
+### 4. 服务驱动模式
+
+通过单例服务驱动模态框组件：
+
+```typescript
+// ConfirmDialogService
+class ConfirmDialogService {
+  private isOpen = signal(false);
+  private options = signal<ConfirmDialogOptions | null>(null);
+  
+  confirm(options: ConfirmDialogOptions): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.options.set(options);
+      this.isOpen.set(true);
+      this.resolveCallback = resolve;
+    });
+  }
+}
+
+// 单例导出
+export const confirmDialogService = new ConfirmDialogService();
+```
+
+**使用场景**：
+- 确认对话框（删除操作确认）
+- 通知系统（toast 消息）
 
 ---
 
 ## 副作用管理 (Effects)
 
-Angular Effects 用于处理副作用和响应式订阅：
+Angular Effects 用于处理副作用和响应式订阅。在本项目中，Effects 主要在根组件 `app.ts` 中使用：
 
-### 1. 认证状态监听
+### 1. 配置库自动刷新
+
+当用户登录且显示库模态框时，自动刷新配置列表：
 
 ```typescript
+// app.ts
 effect(() => {
-  const user = this.firebaseService.authState();
-  this.isLoggedIn.set(!!user);
-  this.user.set(user);
-
-  if (user) {
-    this.loadUserConfigurations();
+  const loggedIn = configStore.isLoggedIn();
+  if (loggedIn && configStore.showLibrary()) {
+    configService.refreshMyConfigs();
   }
 });
 ```
 
-### 2. 车型切换时加载组件
+### 2. 认证状态监听
+
+通过 Firebase Auth 状态变化更新登录状态：
 
 ```typescript
-effect(() => {
-  const type = this.activeType();
-  this.loadComponentsForType(type);
-});
+// config.service.ts
+initAuthListener() {
+  onAuthStateChanged(auth, (user) => {
+    configStore.setIsLoggedIn(!!user);
+  });
+}
 ```
 
-### 3. 库模态框自动刷新
+### 3. 组件选择器监听
+
+在 `PreviewComponent` 中监听车型变化以更新 3D 渲染：
 
 ```typescript
+// preview.ts
 effect(() => {
-  if (this.showLibrary()) {
-    this.refreshMyConfigs();
+  const currentType = this.type();
+  if (isPlatformBrowser(this.platformId) && this.bikeGroup) {
+    this.buildBikeMesh(currentType);
   }
 });
 ```
