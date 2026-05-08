@@ -1,9 +1,9 @@
-// src/app/components/build-list.ts v3.2.0
+// src/app/features/configurator/components/build-list.component.ts - 重构版本 v3.3.0
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { ConfigComponent } from '../types';
+import { ConfigComponent } from '../../../core/models/types';
 import { CurrencyPipe } from '@angular/common';
-import { TPipe } from '../services/i18n';
-import { LoadingIndicatorComponent } from './loading-indicator';
+import { TPipe } from '../../../core/services/i18n.service';
+import { LoadingIndicatorComponent } from '../../../shared/components/loading-indicator.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

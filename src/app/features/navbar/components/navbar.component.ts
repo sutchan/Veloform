@@ -1,10 +1,10 @@
-// src/app/components/navbar.ts v3.2.0
+// src/app/features/navbar/components/navbar.component.ts - 重构版本 v3.3.0
 import { ChangeDetectionStrategy, Component, signal, output } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { User } from 'firebase/auth';
-import { auth, loginWithGoogle } from '../services/firebase';
+import { auth, firebaseService } from '../../../core/services/firebase.service';
 import { onAuthStateChanged } from 'firebase/auth';
-import { TPipe, toggleLang, currentLang } from '../services/i18n';
+import { TPipe, i18nService } from '../../../core/services/i18n.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +29,7 @@ import { TPipe, toggleLang, currentLang } from '../services/i18n';
       </div>
       <div class="text-right hidden sm:block">
         <div class="text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.language' | t }}</div>
-        <button (click)="switchLang()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ lang() === 'en' ? 'English' : '中文' }}</button>
+        <button (click)="switchLang()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ i18nService.isEnglish() ? 'English' : '中文' }}</button>
       </div>
       <div class="text-right hidden sm:block" id="user-profile-container">
         <div class="text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.project_id' | t }}</div>
@@ -53,7 +53,7 @@ import { TPipe, toggleLang, currentLang } from '../services/i18n';
 export class NavbarComponent {
   user = signal<User | null>(null);
   isDark = signal(true);
-  lang = currentLang;
+  i18nService = i18nService;
   openLibrary = output<void>();
 
   constructor() {
@@ -61,7 +61,6 @@ export class NavbarComponent {
       this.user.set(u);
     });
     
-    // Initialize theme based on current DOM if available
     if (typeof document !== 'undefined') {
       this.isDark.set(document.documentElement.classList.contains('dark'));
     }
@@ -79,10 +78,10 @@ export class NavbarComponent {
   }
 
   switchLang() {
-    toggleLang();
+    i18nService.toggle();
   }
 
   async login() {
-    await loginWithGoogle();
+    await firebaseService.loginWithGoogle();
   }
 }

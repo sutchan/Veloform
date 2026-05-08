@@ -1,8 +1,8 @@
-// src/app/components/preview.ts v3.2.0
+// src/app/features/configurator/components/preview.component.ts - 重构版本 v3.3.0
 import { ChangeDetectionStrategy, Component, input, effect, ElementRef, ViewChild, AfterViewInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { DecimalPipe, CurrencyPipe } from '@angular/common';
-import { TPipe } from '../services/i18n';
+import { TPipe } from '../../../core/services/i18n.service';
 import * as THREE from 'three';
 
 @Component({
@@ -79,7 +79,7 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       cancelAnimationFrame(this.animationId);
       window.removeEventListener('resize', this.onResize.bind(this));
-      if (this.renderer) {
+      if (this.renderer && this.rendererContainer) {
         this.renderer.dispose();
         this.rendererContainer.nativeElement.removeChild(this.renderer.domElement);
       }
@@ -111,7 +111,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
   }
 
   private buildBikeMesh(bikeType: string) {
-    // Clear old
     while(this.bikeGroup.children.length > 0) { 
         this.bikeGroup.remove(this.bikeGroup.children[0]); 
     }
@@ -129,7 +128,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
       return mesh;
     };
 
-    // Wheels
     const tireRadius = bikeType === 'Fold' ? 0.2 : 0.4;
     const tireThick = bikeType === 'MTB' ? 0.05 : 0.02;
     const geoTire = new THREE.TorusGeometry(tireRadius, tireThick, 16, 64);
@@ -140,7 +138,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     const wheel2 = new THREE.Mesh(geoTire, matTire);
     wheel2.position.set(0.6, -0.2, 0);
 
-    // Frame (Diamond)
     const topTube = createCylinder(0.02, 0.7, matFrame);
     topTube.position.set(0, 0.3, 0);
     topTube.rotation.z = Math.PI / 2;
@@ -161,7 +158,6 @@ export class PreviewComponent implements AfterViewInit, OnDestroy {
     seatStay.position.set(-0.5, 0.05, 0);
     seatStay.rotation.z = -Math.PI / 3;
 
-    // Handlebars & Fork
     const fork = createCylinder(0.015, 0.6, matFrame);
     fork.position.set(0.5, 0.05, 0);
     fork.rotation.z = Math.PI / 8;
