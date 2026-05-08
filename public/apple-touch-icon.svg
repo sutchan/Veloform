@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="180" height="180" rx="40" fill="#0a0a0b"/>
+  
+  <!-- V letter -->
+  <text x="90" y="130" font-family="Arial Black, sans-serif" font-size="120" font-weight="900" fill="url(#accentGrad)" text-anchor="middle">V</text>
+  
+  <!-- Accent underline -->
+  <rect x="30" y="145" width="120" height="10" rx="5" fill="url(#accentGrad)"/>
+</svg>

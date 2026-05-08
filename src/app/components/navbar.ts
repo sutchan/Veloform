@@ -12,12 +12,10 @@ import { TPipe, toggleLang, currentLang } from '../services/i18n';
   imports: [UpperCasePipe, TPipe],
   template: `
   <nav class="h-16 border-b border-zinc-800 flex items-center justify-between px-8 bg-[#0a0a0b]" id="main-nav">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 bg-zinc-100 rounded flex items-center justify-center">
-        <div class="w-4 h-4 border-2 border-[#0a0a0b] rotate-45"></div>
-      </div>
+    <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity" aria-label="Veloform Home">
+      <img src="/logo.svg" alt="Veloform Logo" class="w-8 h-8" width="32" height="32" />
       <span class="text-white font-bold tracking-widest text-xl uppercase">Veloform</span>
-    </div>
+    </a>
     <div class="flex gap-8 text-xs font-medium uppercase tracking-widest hidden md:flex">
       <a href="#" class="text-white border-b border-white pb-1">{{ 'nav.configurator' | t }}</a>
       <a href="#" (click)="$event.preventDefault(); openLibrary.emit()" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.library' | t }}</a>

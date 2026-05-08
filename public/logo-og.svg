@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#0f0f1a"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="192" height="192" rx="32" fill="url(#bgGrad)"/>
+  
+  <!-- Bicycle Frame - Abstract V shape -->
+  <g fill="none" stroke="url(#accentGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main V frame -->
+    <path d="M56 128 L96 72 L136 128" />
+    <!-- Top tube -->
+    <path d="M67 88 L125 88" />
+    <!-- Seat post -->
+    <path d="M96 72 L88 48 L104 48" />
+    <!-- Handlebars -->
+    <path d="M128 72 L144 64 L144 77" />
+  </g>
+  
+  <!-- Wheels -->
+  <g fill="none" stroke="url(#accentGrad)" stroke-width="4" opacity="0.8">
+    <!-- Front wheel -->
+    <circle cx="56" cy="128" r="28"/>
+    <circle cx="56" cy="128" r="18"/>
+    
+    <!-- Rear wheel -->
+    <circle cx="136" cy="128" r="28"/>
+    <circle cx="136" cy="128" r="18"/>
+  </g>
+  
+  <!-- Chain ring -->
+  <circle cx="96" cy="104" r="12" fill="url(#accentGrad)" opacity="0.8"/>
+  
+  <!-- Speed lines -->
+  <g stroke="url(#accentGrad)" stroke-width="3" opacity="0.4">
+    <line x1="24" y1="80" x2="40" y2="80"/>
+    <line x1="32" y1="96" x2="48" y2="96"/>
+    <line x1="24" y1="112" x2="40" y2="112"/>
+  </g>
+  
+  <!-- Veloform text -->
+  <text x="96" y="170" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#f59e0b" text-anchor="middle" letter-spacing="3">VELOFORM</text>
+</svg>
