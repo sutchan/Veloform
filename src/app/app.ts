@@ -1,19 +1,19 @@
-// src/app/app.ts v3.2.0 - Refactored with ConfigStore and ConfigService
+// src/app/app.ts - 重构版本 v3.3.0
 import { ChangeDetectionStrategy, Component, effect, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavbarComponent } from './components/navbar';
+import { NavbarComponent } from './features/navbar/components/navbar.component';
 import { DecimalPipe } from '@angular/common';
-import { SidebarComponent } from './components/sidebar';
-import { PreviewComponent } from './components/preview';
-import { BuildListComponent } from './components/build-list';
-import { NotificationDisplayComponent } from './components/notification-display';
-import { ConfirmDialogComponent, confirmDialogService } from './components/confirm-dialog';
-import { ComponentSelectorComponent } from './components/component-selector';
-import { ConfigComponent, Configuration } from './types';
-import { auth } from './services/firebase';
-import { TPipe, t } from './services/i18n';
-import { configStore } from './services/config.store';
-import { configService } from './services/config.service';
+import { SidebarComponent } from './shared/components/sidebar.component';
+import { PreviewComponent } from './features/configurator/components/preview.component';
+import { BuildListComponent } from './features/configurator/components/build-list.component';
+import { NotificationDisplayComponent } from './shared/components/notification-display.component';
+import { ConfirmDialogComponent, confirmDialogService } from './shared/components/confirm-dialog.component';
+import { ComponentSelectorComponent } from './features/configurator/components/component-selector.component';
+import { ConfigComponent, Configuration } from './core/models/types';
+import { auth } from './core/services/firebase.service';
+import { TPipe, t } from './core/services/i18n.service';
+import { configStore } from './core/stores/config.store';
+import { configService } from './features/configurator/services/config.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
