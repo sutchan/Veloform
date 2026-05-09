@@ -2,31 +2,60 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
-    <title>Veloform Configurator v3.2.0</title>
+    <title>Veloform Configurator v3.3.0 - Build Your Dream Bike</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- SEO & GEO Meta Tags -->
-    <meta name="description" content="Veloform is an advanced bicycle configurator. Customize Road, MTB, and Folding bikes with real-time weights, aerodynamics, and pricing." />
-    <meta name="keywords" content="bicycle configurator, road bike, mountain bike, folding bike, bike customizer, cycling" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow" />
     <meta name="author" content="Veloform" />
-    <meta name="robots" content="index, follow" />
+    <meta name="creator" content="Veloform" />
+    <meta name="publisher" content="Veloform" />
+    <meta name="keywords" content="bicycle configurator, road bike, mountain bike, folding bike, bike customizer, cycling, bike builder, cycling gear, cycling equipment, bike parts configurator, cycling community" />
+    <meta name="description" content="Veloform is an advanced bicycle configurator. Customize Road, MTB, and Folding bikes with real-time weights, aerodynamics, and pricing. Build your dream bike today." />
+    <meta name="subject" content="Bicycle Configuration and Customization" />
+    <meta name="coverage" content="Worldwide" />
+    <meta name="rating" content="General" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <!-- Geographic Meta Tags (GEO) -->
+    <meta name="geo.region" content="Worldwide" />
+    <meta name="geo.placename" content="Veloform" />
+    <meta name="ICBM" content="0, 0" />
+    <meta name="geo.position" content="0;0" />
     
     <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Veloform Configurator v3.2.0" />
-    <meta property="og:description" content="Advanced bicycle configurator supporting Road, MTB, and Fold bikes. Build your dream bike." />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:site_name" content="Veloform" />
+    <meta property="og:title" content="Veloform Configurator v3.3.0 - Build Your Dream Bike" />
+    <meta property="og:description" content="Advanced bicycle configurator supporting Road, MTB, and Fold bikes. Build your dream bike with real-time component syncing." />
     <meta property="og:url" content="https://veloform.app" />
     <meta property="og:image" content="/logo-og.svg" />
     <meta property="og:image:type" content="image/svg+xml" />
-    <meta property="og:image:width" content="192" />
-    <meta property="og:image:height" content="192" />
-    <meta property="og:site_name" content="Veloform" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Veloform Bicycle Configurator" />
+    <meta property="og:see_also" content="https://github.com/sutchan/veloform" />
+    
+    <!-- Facebook / Meta -->
+    <meta property="fb:app_id" content="veloform-app" />
+    <meta property="fb:admins" content="veloform" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Veloform Configurator v3.2.0" />
-    <meta name="twitter:description" content="Advanced bicycle configurator supporting Road, MTB, and Fold bikes." />
+    <meta name="twitter:site" content="@veloform" />
+    <meta name="twitter:creator" content="@veloform" />
+    <meta name="twitter:title" content="Veloform Configurator v3.3.0 - Build Your Dream Bike" />
+    <meta name="twitter:description" content="Advanced bicycle configurator supporting Road, MTB, and Fold bikes. Build your dream bike." />
     <meta name="twitter:image" content="/logo-og.svg" />
+    <meta name="twitter:image:alt" content="Veloform Bicycle Configurator" />
+    <meta name="twitter:url" content="https://veloform.app" />
+    <meta name="twitter:domain" content="veloform.app" />
+    
+    <!-- Pinterest -->
+    <meta name="pinterest" content="nopin" description="Save this pin for later" />
     
     <!-- Theme Color -->
     <meta name="theme-color" content="#0a0a0b" />
@@ -45,22 +74,128 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Veloform Configurator",
-      "description": "Veloform is an advanced bicycle configurator for Road, MTB, and Fold bikes with real-time component syncing.",
-      "url": "https://veloform.app",
-      "applicationCategory": "DesignApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "100"
-      }
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://veloform.app/#webapplication",
+          "name": "Veloform Configurator",
+          "alternateName": ["Veloform", "Veloform Bike Configurator"],
+          "description": "Advanced bicycle configurator for Road, MTB, and Fold bikes with real-time component syncing, weight calculation, and pricing.",
+          "url": "https://veloform.app",
+          "applicationCategory": "DesignApplication",
+          "operatingSystem": "Web Browser",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/InStock"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "100",
+            "bestRating": "5",
+            "worstRating": "1"
+          },
+          "screenshot": "https://veloform.app/logo-og.svg",
+          "featureList": [
+            "Real-time weight calculation",
+            "Aerodynamic drag estimation",
+            "Component pricing",
+            "Firebase cloud sync",
+            "Multi-language support (EN/ZH)",
+            "3D bike visualization",
+            "Bike type selection (Road/MTB/Fold)",
+            "Component customization"
+          ],
+          "softwareVersion": "3.3.0",
+          "author": {
+            "@type": "Organization",
+            "name": "Veloform",
+            "url": "https://veloform.app"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://veloform.app/#organization",
+          "name": "Veloform",
+          "alternateName": "Veloform Team",
+          "url": "https://veloform.app",
+          "logo": "https://veloform.app/logo.svg",
+          "sameAs": [
+            "https://github.com/sutchan/veloform",
+            "https://twitter.com/veloform"
+          ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "Customer Support",
+            "availableLanguage": ["English", "Chinese"]
+          }
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://veloform.app/#software",
+          "name": "Veloform",
+          "applicationCategory": "DesignApplication",
+          "operatingSystem": "Any",
+          "processorRequirements": "Modern web browser with WebGL support",
+          "memoryRequirements": "4GB RAM minimum",
+          "description": "A web-based bicycle configurator that allows users to customize road, mountain, and folding bikes with real-time component syncing.",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://veloform.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What bike types does Veloform support?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Veloform supports three main bike types: Road bikes, Mountain bikes (MTB), and Folding bikes. Each type has specialized components and default configurations."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How does the real-time weight calculation work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Veloform calculates the total bike weight by summing the weights of all selected components including frame, drivetrain, wheelset, suspension, cockpit, and tires."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I save my bike configurations?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, with Firebase authentication you can save your configurations to the cloud and access them from any device. Free Google sign-in is required."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://veloform.app/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://veloform.app"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Configurator",
+              "item": "https://veloform.app/configurator"
+            }
+          ]
+        }
+      ]
     }
     </script>
   </head>

@@ -11,40 +11,45 @@ import { TPipe, i18nService } from '../../../core/services/i18n.service';
   selector: 'app-navbar',
   imports: [UpperCasePipe, TPipe],
   template: `
-  <nav class="h-16 border-b border-zinc-800 flex items-center justify-between px-8 bg-[#0a0a0b]" id="main-nav">
-    <a href="/" class="flex items-center gap-3 hover:opacity-80 transition-opacity" aria-label="Veloform Home">
-      <img src="/logo.svg" alt="Veloform Logo" class="w-8 h-8" width="32" height="32" />
-      <span class="text-white font-bold tracking-widest text-xl uppercase">Veloform</span>
+  <nav id="main-nav" class="h-14 sm:h-16 border-b border-zinc-800 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-[#0a0a0b]" role="navigation" aria-label="Main navigation">
+    <a id="logo-link" href="/" class="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity" aria-label="Veloform Home">
+      <img id="logo-image" src="/logo.svg" alt="Veloform Logo" class="w-7 h-7 sm:w-8 sm:h-8" width="32" height="32" />
+      <span id="logo-text" class="text-white font-bold tracking-wider sm:tracking-widest text-base sm:text-xl uppercase">Veloform</span>
     </a>
-    <div class="flex gap-8 text-xs font-medium uppercase tracking-widest hidden md:flex">
-      <a href="#" class="text-white border-b border-white pb-1">{{ 'nav.configurator' | t }}</a>
-      <a href="#" (click)="$event.preventDefault(); openLibrary.emit()" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.library' | t }}</a>
-      <a href="#" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.specs' | t }}</a>
-      <a href="#" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.deployment' | t }}</a>
+    
+    <div id="desktop-nav-links" class="hidden md:flex gap-6 lg:gap-8 text-xs font-medium uppercase tracking-widest">
+      <a id="nav-configurator" href="#" class="text-white border-b border-white pb-1">{{ 'nav.configurator' | t }}</a>
+      <a id="nav-library" href="#" (click)="$event.preventDefault(); openLibrary.emit()" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.library' | t }}</a>
+      <a id="nav-specs" href="#" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.specs' | t }}</a>
+      <a id="nav-deployment" href="#" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.deployment' | t }}</a>
     </div>
-    <div class="flex items-center gap-4">
-      <div class="text-right hidden sm:block">
-        <div class="text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.theme' | t }}</div>
-        <button (click)="toggleTheme()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ isDark() ? 'Dark' : 'Light' }}</button>
+
+    <div id="controls-container" class="flex items-center gap-2 sm:gap-4">
+      <div id="theme-control" class="text-right hidden xs:block">
+        <div id="theme-label" class="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.theme' | t }}</div>
+        <button id="theme-toggle" (click)="toggleTheme()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ isDark() ? 'Dark' : 'Light' }}</button>
       </div>
-      <div class="text-right hidden sm:block">
-        <div class="text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.language' | t }}</div>
-        <button (click)="switchLang()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ i18nService.isEnglish() ? 'English' : '中文' }}</button>
+      
+      <div id="language-control" class="text-right hidden xs:block">
+        <div id="language-label" class="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.language' | t }}</div>
+        <button id="language-toggle" (click)="switchLang()" class="text-xs font-mono text-zinc-300 hover:text-white transition-colors cursor-pointer">{{ i18nService.isEnglish() ? 'English' : '中文' }}</button>
       </div>
-      <div class="text-right hidden sm:block" id="user-profile-container">
-        <div class="text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.project_id' | t }}</div>
-        <div class="text-xs font-mono text-zinc-300">VF-992-ROAD</div>
+      
+      <div id="project-id-control" class="text-right hidden sm:block">
+        <div id="project-id-label" class="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.project_id' | t }}</div>
+        <div id="project-id-value" class="text-xs font-mono text-zinc-300">VF-992-ROAD</div>
       </div>
+
       @if (user()) {
-        <div class="w-10 h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs overflow-hidden">
+        <div id="user-avatar-container" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-white text-xs overflow-hidden">
           @if (user()?.photoURL) {
-            <img [src]="user()?.photoURL" alt="User Avatar" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+            <img id="user-avatar" [src]="user()?.photoURL" alt="User Avatar" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
           } @else {
-            {{ user()?.email?.charAt(0) | uppercase }}
+            <span id="user-initial">{{ user()?.email?.charAt(0) | uppercase }}</span>
           }
         </div>
       } @else {
-        <button (click)="login()" class="px-4 py-2 bg-white text-black text-xs font-bold uppercase tracking-widest rounded hover:bg-zinc-200 transition-colors cursor-pointer">{{ 'nav.login' | t }}</button>
+        <button id="login-btn" (click)="login()" class="px-3 sm:px-4 py-2 bg-white text-black text-xs font-bold uppercase tracking-wider rounded hover:bg-zinc-200 transition-colors cursor-pointer touch-target">{{ 'nav.login' | t }}</button>
       }
     </div>
   </nav>

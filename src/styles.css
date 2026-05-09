@@ -1,3 +1,245 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.css - 全局样式 v3.3.0 */
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    --breakpoint-xs: 320px;
+    --breakpoint-sm: 640px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 1024px;
+    --breakpoint-xl: 1280px;
+    --breakpoint-2xl: 1536px;
+
+    --spacing-section: 1.5rem;
+    --spacing-container: 1rem;
+    --touch-target-min: 44px;
+
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+  }
+
+  img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  input, button, textarea, select {
+    font: inherit;
+  }
+
+  button {
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
+  }
+
+  a {
+    text-decoration-skip-ink: auto;
+  }
+
+  ::selection {
+    background-color: rgba(217, 119, 6, 0.3);
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid #d97706;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .touch-target {
+    min-height: var(--touch-target-min);
+    min-width: var(--touch-target-min);
+  }
+
+  .responsive-padding {
+    @apply px-4;
+  }
+
+  .responsive-padding-lg {
+    @apply px-4 md:px-6 lg:px-8;
+  }
+
+  .responsive-gap {
+    @apply gap-2 md:gap-4 lg:gap-6;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .safe-area-inset-top {
+    padding-top: env(safe-area-inset-bottom);
+  }
+
+  .container-responsive {
+    @apply w-full mx-auto px-4 sm:px-6 lg:px-8;
+    max-width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .container-responsive {
+      max-width: 640px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .container-responsive {
+      max-width: 768px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-responsive {
+      max-width: 1024px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-responsive {
+      max-width: 1280px;
+    }
+  }
+}
+
+@layer utilities {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  .text-responsive-hero {
+    @apply text-3xl sm:text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  .text-responsive-title {
+    @apply text-2xl sm:text-3xl md:text-4xl;
+  }
+
+  .text-responsive-body {
+    @apply text-sm sm:text-base md:text-lg;
+  }
+
+  .transition-responsive {
+    @apply transition-all duration-200 ease-out;
+  }
+
+  .hover-lift {
+    @apply hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .backdrop-blur-responsive {
+    @apply backdrop-blur-sm md:backdrop-blur-md;
+  }
+
+  .z-index-dropdown {
+    z-index: 50;
+  }
+
+  .z-index-modal {
+    z-index: 100;
+  }
+
+  .z-index-toast {
+    z-index: 9999;
+  }
+}
+
+/* Responsive typography scaling */
+@media (max-width: 639px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Ensure minimum touch target sizes on mobile */
+@media (pointer: coarse) {
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  input, select, textarea {
+    min-height: 44px;
+    font-size: 16px !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: no-preference) {
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

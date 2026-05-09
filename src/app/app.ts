@@ -34,74 +34,89 @@ import { configService } from './features/configurator/services/config.service';
     </app-component-selector>
   }
 
-  <div class="bg-[#0a0a0b] text-zinc-300 font-sans w-full h-screen overflow-hidden flex flex-col relative">
-    <app-navbar (openLibrary)="onOpenLibrary()"></app-navbar>
+  <div id="app-container" class="bg-[#0a0a0b] text-zinc-300 font-sans w-full h-screen overflow-hidden flex flex-col relative">
+    <header id="header-container">
+      <app-navbar id="app-navbar" (openLibrary)="onOpenLibrary()"></app-navbar>
+    </header>
 
-    <main class="flex flex-1 overflow-hidden flex-col md:flex-row relative">
-      <app-sidebar class="hidden md:flex h-full" [activeType]="configStore.activeType()" (typeSelected)="onTypeSelected($event)"></app-sidebar>
+    <main id="main-content" class="flex flex-1 overflow-hidden flex-col lg:flex-row relative">
+      <nav id="sidebar-nav" class="hidden lg:flex h-full" aria-label="Bike type selector">
+        <app-sidebar class="hidden lg:flex h-full" [activeType]="configStore.activeType()" (typeSelected)="onTypeSelected($event)"></app-sidebar>
+      </nav>
 
-      <div class="flex md:hidden w-full border-b border-zinc-800 bg-[#0c0c0d] p-2 gap-2 justify-center">
+      <div id="mobile-bike-selector" class="lg:hidden w-full border-b border-zinc-800 bg-[#0c0c0d] p-3 gap-2 flex justify-center" role="tablist" aria-label="Select bike type">
         @for (type of bikeTypes; track type) {
           <button
+            role="tab"
+            [attr.aria-selected]="configStore.activeType() === type"
             (click)="onTypeSelected(type)"
-            class="px-4 py-2 text-xs font-bold uppercase rounded-lg border border-zinc-800"
-            [class.bg-zinc-800]="configStore.activeType() === type"
-            [class.text-white]="configStore.activeType() === type"
-            [class.text-zinc-500]="configStore.activeType() !== type">
+            class="px-5 py-2.5 text-xs font-bold uppercase rounded-lg border transition-all duration-200 touch-target"
+            [class.bg-amber-500]="configStore.activeType() === type"
+            [class.border-amber-500]="configStore.activeType() === type"
+            [class.text-black]="configStore.activeType() === type"
+            [class.bg-transparent]="configStore.activeType() !== type"
+            [class.border-zinc-700]="configStore.activeType() !== type"
+            [class.text-zinc-400]="configStore.activeType() !== type">
             {{ type === 'Road' ? ('sidebar.road' | t) : type === 'MTB' ? ('sidebar.mtb' | t) : ('sidebar.fold' | t) }}
           </button>
         }
       </div>
 
-      <div class="flex flex-col md:flex-row flex-1 overflow-hidden relative">
-        <app-preview
-          class="flex-1 h-[50vh] md:h-full relative flex flex-col z-10 border-b md:border-b-0 md:border-r border-zinc-800 shadow-2xl"
-          [name]="configStore.configName()"
-          [type]="configStore.activeType()"
-          [weight]="configStore.totalWeight()"
-          [cost]="configStore.totalCost()">
-        </app-preview>
+      <div id="content-area" class="flex flex-col lg:flex-row flex-1 overflow-hidden relative">
+        <section id="preview-section" class="flex-1 h-[45vh] lg:h-full relative flex flex-col z-10 border-b lg:border-b-0 lg:border-r border-zinc-800 shadow-2xl" aria-label="Bike preview">
+          <app-preview
+            [name]="configStore.configName()"
+            [type]="configStore.activeType()"
+            [weight]="configStore.totalWeight()"
+            [cost]="configStore.totalCost()">
+          </app-preview>
+        </section>
 
-        <app-build-list
-          class="h-[50vh] md:h-full shrink-0 relative z-10 bg-[#0a0a0b]"
-          [components]="configStore.components()"
-          [isSaving]="configStore.isSaving()"
-          (sync)="onSync()"
-          (deploy)="onDeploy()"
-          (edit)="onEditComponent($event)">
-        </app-build-list>
+        <aside id="config-panel" class="h-[55vh] lg:h-full lg:w-96 shrink-0 relative z-10 bg-[#0a0a0b]" aria-label="Configuration panel">
+          <app-build-list
+            [components]="configStore.components()"
+            [isSaving]="configStore.isSaving()"
+            (sync)="onSync()"
+            (deploy)="onDeploy()"
+            (edit)="onEditComponent($event)">
+          </app-build-list>
+        </aside>
 
         @if (configStore.showLibrary()) {
-          <div class="absolute inset-0 z-50 bg-[#0a0a0b]/90 backdrop-blur-xl p-10 flex flex-col pt-10" id="library-modal">
-            <div class="flex justify-between items-center mb-10 w-full mx-auto">
-              <h2 class="text-3xl font-light text-white">{{ 'library.title' | t }}</h2>
-              <button (click)="onCloseLibrary()" class="p-2 hover:bg-zinc-800 rounded-full cursor-pointer" [attr.aria-label]="'library.close' | t">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="stroke-white" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          <div id="library-modal" class="absolute inset-0 z-50 bg-[#0a0a0b]/90 backdrop-blur-xl p-4 sm:p-6 lg:p-10 flex flex-col pt-12 lg:pt-10" role="dialog" aria-modal="true" aria-labelledby="library-title">
+            <div id="library-header" class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 lg:mb-10 w-full mx-auto max-w-7xl">
+              <h2 id="library-title" class="text-2xl sm:text-3xl font-light text-white">{{ 'library.title' | t }}</h2>
+              <button id="library-close-btn" (click)="onCloseLibrary()" class="p-3 hover:bg-zinc-800 rounded-full cursor-pointer transition-colors touch-target" [attr.aria-label]="'library.close' | t">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="stroke-white" stroke-width="2" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
               </button>
             </div>
 
-            <div class="w-full mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto">
+            <div id="library-content" class="w-full mx-auto max-w-7xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 overflow-y-auto flex-1">
               @if (!configStore.isLoggedIn()) {
-                <div class="col-span-full text-center text-zinc-500 py-20">{{ 'library.login_required' | t }}</div>
+                <div id="library-login-prompt" class="col-span-full text-center text-zinc-500 py-12 sm:py-20">
+                  <p class="text-sm sm:text-base">{{ 'library.login_required' | t }}</p>
+                </div>
               } @else if (configStore.myConfigs().length === 0) {
-                <div class="col-span-full text-center text-zinc-500 py-20">{{ 'library.no_builds' | t }}</div>
+                <div id="library-empty-state" class="col-span-full text-center text-zinc-500 py-12 sm:py-20">
+                  <p class="text-sm sm:text-base">{{ 'library.no_builds' | t }}</p>
+                </div>
               } @else {
                 @for (cfg of configStore.myConfigs(); track cfg.id) {
-                  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:border-zinc-600 transition-colors cursor-pointer group" (click)="loadConfig(cfg)" (keydown.enter)="loadConfig(cfg)" tabindex="0">
-                    <div class="flex justify-between items-start mb-4">
+                  <article id="config-card-{{ cfg.id }}" class="bg-zinc-900 border border-zinc-800 rounded-xl p-4 sm:p-6 hover:border-zinc-600 transition-all cursor-pointer group" (click)="loadConfig(cfg)" (keydown.enter)="loadConfig(cfg)" tabindex="0" role="button">
+                    <div id="card-header-{{ cfg.id }}" class="flex justify-between items-start mb-4">
                       <div>
-                        <div class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">{{ ('bike_type.' + cfg.bikeType.toLowerCase()) | t }}</div>
-                        <h3 class="text-xl font-medium text-white group-hover:text-amber-500 transition-colors">{{ cfg.name }}</h3>
+                        <div id="card-type-{{ cfg.id }}" class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">{{ ('bike_type.' + cfg.bikeType.toLowerCase()) | t }}</div>
+                        <h3 id="card-name-{{ cfg.id }}" class="text-base sm:text-xl font-medium text-white group-hover:text-amber-500 transition-colors">{{ cfg.name }}</h3>
                       </div>
-                      <button (click)="removeConfig(cfg.id, $event)" class="text-zinc-600 hover:text-red-500 p-1 cursor-pointer bg-transparent border-none" [attr.aria-label]="'library.delete' | t">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                      <button id="delete-btn-{{ cfg.id }}" (click)="removeConfig(cfg.id, $event)" class="text-zinc-600 hover:text-red-500 p-2 cursor-pointer bg-transparent border-none touch-target" [attr.aria-label]="'library.delete' | t">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                       </button>
                     </div>
-                    <div class="flex justify-between items-baseline mt-6 pt-4 border-t border-zinc-800">
-                      <div class="text-sm text-zinc-400">{{ cfg.estimatedWeight | number:'1.2-2' }} kg</div>
-                      <div class="text-lg text-white font-mono">\${{ cfg.totalCost | number:'1.0-0' }}</div>
+                    <div id="card-stats-{{ cfg.id }}" class="flex justify-between items-baseline mt-4 sm:mt-6 pt-4 border-t border-zinc-800">
+                      <div id="card-weight-{{ cfg.id }}" class="text-xs sm:text-sm text-zinc-400">{{ cfg.estimatedWeight | number:'1.2-2' }} kg</div>
+                      <div id="card-cost-{{ cfg.id }}" class="text-base sm:text-lg text-white font-mono">\${{ cfg.totalCost | number:'1.0-0' }}</div>
                     </div>
-                  </div>
+                  </article>
                 }
               }
             </div>

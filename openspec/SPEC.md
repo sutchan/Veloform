@@ -1,4 +1,4 @@
-# Veloform 规范概览 (v3.2.0)
+# Veloform 规范概览 (v3.3.0)
 
 > **注意**: 本文档已重构为模块化结构。详细内容请访问 [openspec/README.md](./README.md)。
 
@@ -30,10 +30,12 @@ Veloform 是一个本地化（EN/ZH）、高性能的自行车配置器，支持
 
 ## 核心架构原则
 
-1. **单向数据流** - 使用 Angular Signals 实现可预测的状态管理
-2. **OnPush 变更检测** - 所有组件默认使用 OnPush 策略
-3. **Standalone Components** - 无模块嵌套，扁平化组件架构
-4. **平台安全** - Three.js 和 DOM 操作需要 `isPlatformBrowser()` 检查
+1. **分层架构** - Core / Features / Shared 三层分离
+2. **单向数据流** - 使用 Angular Signals 实现可预测的状态管理
+3. **OnPush 变更检测** - 所有组件默认使用 OnPush 策略
+4. **Standalone Components** - 扁平化组件架构
+5. **Repository 模式** - 数据访问层与业务逻辑分离
+6. **平台安全** - Three.js 和 DOM 操作需要 `isPlatformBrowser()` 检查
 
 详细架构设计见：
 - [架构概览](./architecture/overview.md)
@@ -124,9 +126,10 @@ Veloform 是一个本地化（EN/ZH）、高性能的自行车配置器，支持
 
 | 规范版本 | 项目版本 | 更新日期 | 说明 |
 |---------|---------|---------|------|
+| v3.3.0 | 3.3.0 | 2026-05-08 | 完整架构重构，引入 Feature-Based 分层结构（Core/Features/Shared） |
 | v3.2.0 | 3.2.0 | 2026-05-01 | 新增组件编辑模态框、路由系统、通知系统、确认对话框服务 |
 | v3.1.0 | 3.1.0 | 2026-05-01 | 模块化重构，拆分为多个专业文档 |
 
 ---
 
-**最后更新**: 2026-05-01
+**最后更新**: 2026-05-08

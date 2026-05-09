@@ -7,21 +7,24 @@ import { notificationService } from '../../core/services/notification.service';
   selector: 'app-notification-display',
   imports: [],
   template: `
-  <div class="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 pointer-events-none" id="notification-container">
+  <div id="notification-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col gap-2 sm:gap-3 pointer-events-none" role="region" aria-label="Notifications">
     @for (notif of notificationService.notifications(); track notif.id) {
       <div 
-        class="px-6 py-4 rounded-lg shadow-2xl text-sm font-medium animate-in fade-in slide-in-from-right-4 pointer-events-auto transition-all"
+        id="notification-{{ notif.id }}"
+        class="px-4 sm:px-6 py-3 sm:py-4 rounded-lg shadow-2xl text-sm font-medium animate-in fade-in slide-in-from-right-4 pointer-events-auto transition-all"
         [class]="getNotificationClasses(notif.type)"
         role="alert"
-        [attr.aria-live]="notif.type === 'error' ? 'assertive' : 'polite'">
-        <div class="flex items-start gap-3">
-          <span>{{ getIcon(notif.type) }}</span>
-          <p class="leading-relaxed">{{ notif.message }}</p>
+        [attr.aria-live]="notif.type === 'error' ? 'assertive' : 'polite'"
+        [attr.aria-atomic]="true">
+        <div id="notification-content-{{ notif.id }}" class="flex items-start gap-2 sm:gap-3">
+          <span id="notification-icon-{{ notif.id }}" class="flex-shrink-0">{{ getIcon(notif.type) }}</span>
+          <p id="notification-message-{{ notif.id }}" class="leading-relaxed">{{ notif.message }}</p>
           <button 
+            id="notification-close-{{ notif.id }}"
             (click)="notificationService.remove(notif.id)"
-            class="ml-2 opacity-70 hover:opacity-100 transition-opacity flex-shrink-0"
-            aria-label="Close notification">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            class="ml-1 sm:ml-2 opacity-70 hover:opacity-100 transition-opacity flex-shrink-0 p-1 touch-target"
+            [attr.aria-label]="'Close notification'">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M18 6 6 18M6 6l12 12"/>
             </svg>
           </button>
@@ -49,7 +52,7 @@ export class NotificationDisplayComponent {
   notificationService = notificationService;
 
   getNotificationClasses(type: string): string {
-    const baseClasses = 'max-w-md';
+    const baseClasses = 'max-w-xs sm:max-w-md';
     switch (type) {
       case 'success':
         return `${baseClasses} bg-green-900/80 text-green-100 border border-green-700`;

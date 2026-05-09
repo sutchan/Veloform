@@ -10,32 +10,30 @@ import * as THREE from 'three';
   selector: 'app-preview',
   imports: [DecimalPipe, CurrencyPipe, TPipe],
   template: `
-  <section class="flex-1 relative flex flex-col bg-[#0f0f11]" id="preview-section">
-    <div class="absolute top-10 left-10 z-10 pointer-events-none">
-      <h1 class="text-4xl font-light text-white tracking-tight">{{ name() }}</h1>
-      <p class="text-zinc-500 font-serif italic mt-1">{{ 'preview.v_custom' | t }}</p>
+  <section id="preview-section" class="flex-1 relative flex flex-col bg-[#0f0f11]" role="region" aria-label="Bike preview">
+    <div id="preview-header" class="absolute top-6 left-4 sm:top-8 sm:left-8 lg:top-10 lg:left-10 z-10 pointer-events-none">
+      <h1 id="preview-title" class="text-2xl sm:text-3xl lg:text-4xl font-light text-white tracking-tight">{{ name() }}</h1>
+      <p id="preview-subtitle" class="text-zinc-500 font-serif italic mt-1 text-sm sm:text-base">{{ 'preview.v_custom' | t }}</p>
     </div>
     
-    <!-- Interactive Canvas Placeholder -->
-    <div class="flex-1 w-full h-full relative" id="canvas-container">
-      <div #rendererContainer class="absolute inset-0 cursor-move"></div>
+    <div id="canvas-wrapper" class="flex-1 w-full h-full relative" aria-hidden="true">
+      <div id="canvas-container" #rendererContainer class="absolute inset-0 cursor-move"></div>
     </div>
 
-    <!-- Quick Stats Footer -->
-    <div class="h-24 border-t border-zinc-800 flex items-center px-4 md:px-12 gap-6 md:gap-12 bg-[#0a0a0b]/80 backdrop-blur-md overflow-x-auto z-10" id="stats-container">
-      <div class="flex-shrink-0">
-        <div class="text-[10px] uppercase text-zinc-500 tracking-widest mb-1">{{ 'preview.est_weight' | t }}</div>
-        <div class="text-2xl font-light text-white">{{ weight() | number:'1.2-2' }} <span class="text-xs text-zinc-500">kg</span></div>
+    <div id="stats-bar" class="h-auto sm:h-24 border-t border-zinc-800 flex items-center px-4 sm:px-6 lg:px-12 py-3 sm:py-0 gap-4 sm:gap-6 lg:gap-12 bg-[#0a0a0b]/80 backdrop-blur-md overflow-x-auto" role="region" aria-label="Bike statistics">
+      <div id="stat-weight" class="flex-shrink-0">
+        <div id="stat-weight-label" class="text-[9px] sm:text-[10px] uppercase text-zinc-500 tracking-widest mb-1">{{ 'preview.est_weight' | t }}</div>
+        <div id="stat-weight-value" class="text-lg sm:text-2xl font-light text-white">{{ weight() | number:'1.2-2' }} <span class="text-xs text-zinc-500">kg</span></div>
       </div>
-      <div class="w-px h-10 bg-zinc-800 flex-shrink-0"></div>
-      <div class="flex-shrink-0">
-        <div class="text-[10px] uppercase text-zinc-500 tracking-widest mb-1">{{ 'preview.aero_drag' | t }}</div>
-        <div class="text-2xl font-light text-white">{{ cost() > 5000 ? '-14.2' : '-8.5' }} <span class="text-xs text-zinc-500">watts</span></div>
+      <div id="stat-divider-1" class="w-px h-8 sm:h-10 bg-zinc-800 flex-shrink-0"></div>
+      <div id="stat-aero" class="flex-shrink-0">
+        <div id="stat-aero-label" class="text-[9px] sm:text-[10px] uppercase text-zinc-500 tracking-widest mb-1">{{ 'preview.aero_drag' | t }}</div>
+        <div id="stat-aero-value" class="text-lg sm:text-2xl font-light text-white">{{ cost() > 5000 ? '-14.2' : '-8.5' }} <span class="text-xs text-zinc-500">watts</span></div>
       </div>
-      <div class="w-px h-10 bg-zinc-800 flex-shrink-0"></div>
-      <div class="flex-shrink-0">
-        <div class="text-[10px] uppercase text-zinc-500 tracking-widest mb-1">{{ 'preview.total_cost' | t }}</div>
-        <div class="text-2xl font-light text-amber-500">{{ cost() | currency:'USD':'symbol':'1.0-0' }} <span class="text-xs text-zinc-500">USD</span></div>
+      <div id="stat-divider-2" class="w-px h-8 sm:h-10 bg-zinc-800 flex-shrink-0"></div>
+      <div id="stat-cost" class="flex-shrink-0">
+        <div id="stat-cost-label" class="text-[9px] sm:text-[10px] uppercase text-zinc-500 tracking-widest mb-1">{{ 'preview.total_cost' | t }}</div>
+        <div id="stat-cost-value" class="text-lg sm:text-2xl font-light text-amber-500">{{ cost() | currency:'USD':'symbol':'1.0-0' }} <span class="text-xs text-zinc-500">USD</span></div>
       </div>
     </div>
   </section>
