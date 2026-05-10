@@ -18,10 +18,10 @@ import { TPipe, i18nService } from '../../../core/services/i18n.service';
     </a>
     
     <div id="desktop-nav-links" class="hidden md:flex gap-6 lg:gap-8 text-xs font-medium uppercase tracking-widest">
-      <a id="nav-configurator" href="#" class="text-white border-b border-white pb-1">{{ 'nav.configurator' | t }}</a>
-      <a id="nav-library" href="#" (click)="$event.preventDefault(); openLibrary.emit()" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.library' | t }}</a>
-      <a id="nav-specs" href="#" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.specs' | t }}</a>
-      <a id="nav-deployment" href="#" class="hover:text-white text-zinc-500 transition-colors">{{ 'nav.deployment' | t }}</a>
+      <span id="nav-configurator" class="text-white border-b border-white pb-1 cursor-default">{{ 'nav.configurator' | t }}</span>
+      <button id="nav-library" (click)="openLibrary.emit()" class="hover:text-white text-zinc-500 transition-colors cursor-pointer bg-transparent border-none p-0">{{ 'nav.library' | t }}</button>
+      <span id="nav-specs" class="text-zinc-500 cursor-not-allowed">{{ 'nav.specs' | t }}</span>
+      <span id="nav-deployment" class="text-zinc-500 cursor-not-allowed">{{ 'nav.deployment' | t }}</span>
     </div>
 
     <div id="controls-container" class="flex items-center gap-2 sm:gap-4">

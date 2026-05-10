@@ -15,6 +15,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         <span class="text-sm font-medium">{{ message() }}</span>
       }
     </div>
+  } @else {
+    <div [class]="wrapperClass()" style="height: 20px;"></div>
   }
   `,
   styles: [`
@@ -23,7 +25,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
         transform: rotate(360deg);
       }
     }
-    
+
     .animate-spin {
       animation: spin 1s linear infinite;
     }

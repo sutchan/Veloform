@@ -1,5 +1,4 @@
 /* src/styles.css - 全局样式 v3.3.0 */
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import "tailwindcss";
 
 @layer base {
