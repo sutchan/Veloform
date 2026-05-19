@@ -1,6 +1,6 @@
-// src/app/services/i18n.spec.ts v3.2.0
+// src/app/core/services/i18n.spec.ts v3.3.1
 import { describe, it, expect, beforeEach } from 'vitest';
-import { i18nService, currentLang, toggleLang, t } from '../core/services/i18n.service';
+import { i18nService, currentLang, toggleLang, t } from './i18n.service';
 
 describe('I18n Service', () => {
   beforeEach(() => {

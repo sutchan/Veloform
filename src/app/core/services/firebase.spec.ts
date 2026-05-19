@@ -1,6 +1,6 @@
-// src/app/services/firebase.spec.ts v3.2.0
+// src/app/core/services/firebase.spec.ts v3.3.1
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { notificationService } from '../core/services/notification.service';
+import { notificationService } from './notification.service';
 
 describe('NotificationService', () => {
   beforeEach(() => {

@@ -1,10 +1,11 @@
-// src/app/features/navbar/components/navbar.component.ts - 重构版本 v3.3.0
-import { ChangeDetectionStrategy, Component, signal, output } from '@angular/core';
+// src/app/features/navbar/components/navbar.component.ts - 重构版本 v3.3.1
+import { ChangeDetectionStrategy, Component, signal, output, computed } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
 import { User } from 'firebase/auth';
 import { auth, firebaseService } from '../../../core/services/firebase.service';
 import { onAuthStateChanged } from 'firebase/auth';
 import { TPipe, i18nService } from '../../../core/services/i18n.service';
+import { configStore } from '../../../core/stores/config.store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +38,7 @@ import { TPipe, i18nService } from '../../../core/services/i18n.service';
       
       <div id="project-id-control" class="text-right hidden sm:block">
         <div id="project-id-label" class="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-tighter leading-none">{{ 'nav.project_id' | t }}</div>
-        <div id="project-id-value" class="text-xs font-mono text-zinc-300">VF-992-ROAD</div>
+        <div id="project-id-value" class="text-xs font-mono text-zinc-300">{{ dynamicProjectId() }}</div>
       </div>
 
       @if (user()) {
@@ -60,6 +61,17 @@ export class NavbarComponent {
   isDark = signal(true);
   i18nService = i18nService;
   openLibrary = output<void>();
+
+  dynamicProjectId = computed(() => {
+    const type = configStore.activeType();
+    const prefix = type === 'Road' ? 'VF-RD' : type === 'MTB' ? 'VF-MB' : 'VF-FD';
+    const id = configStore.configId();
+    if (id) {
+      const shortId = id.substring(0, 4).toUpperCase();
+      return `${prefix}-${shortId}`;
+    }
+    return `${prefix}-NEW`;
+  });
 
   constructor() {
     onAuthStateChanged(auth, (u) => {
