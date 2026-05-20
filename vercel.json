@@ -2,7 +2,7 @@
   "version": 2,
   "framework": "angular",
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/app/browser",
+  "outputDirectory": "dist/browser",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
   "headers": [
